@@ -58,7 +58,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
   .app{display:grid;grid-template-columns:244px minmax(0,1fr)}
   .side{display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;padding:22px 16px;background:var(--surface);border-right:1px solid var(--line)}
   .main{padding:26px 34px 48px;width:100%}
-  .bnav,.fab-m{display:none!important}
+  .bnav,.fab-m,.mo-only{display:none!important}
 }
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.01em;padding:4px 10px 18px}
 .brand .logo{width:34px;height:34px;border-radius:11px;background:var(--brand);display:grid;place-items:center;color:var(--on-brand)}
@@ -484,7 +484,7 @@ const store=(function(){
     catch(e){if(!e.auth)setSync('Đang ngoại tuyến, hiển thị dữ liệu lưu trên máy này.')}
   }
   function showLogin(msg){$('#login').hidden=false;$('#loginErr').textContent=msg||'';setTimeout(()=>$('#pw').focus(),50)}
-  function logout(reason){token='';localStorage.removeItem(TK);if(!reason){S={months:{},goals:[]};queue=[];localStorage.removeItem(CK);localStorage.removeItem(QK);render()}showLogin(reason==='idle'?'Đã quá 10 phút không thao tác. Vui lòng nhập lại mật khẩu.':(reason?'Mật khẩu không đúng hoặc đã đổi. Nhập lại để tiếp tục.':''))}
+  function logout(reason){token='';if(!reason){localStorage.clear();S={months:{},goals:[]};queue=[];render()}else{localStorage.removeItem(TK)}showLogin(reason==='idle'?'Đã quá 10 phút không thao tác. Vui lòng nhập lại mật khẩu.':(reason?'Mật khẩu không đúng hoặc đã đổi. Nhập lại để tiếp tục.':''))}
   $('#loginForm').addEventListener('submit',async e=>{
     e.preventDefault();const pw=$('#pw').value;
     try{const d=await api('GET','/all',null,pw);token=pw;localStorage.setItem(TK,token);$('#login').hidden=true;$('#pw').value='';if(queue.length)await sync();else apply(d)}
@@ -573,7 +573,7 @@ function render(){
   const nextOk=yearMode?selYear<NOW_Y+1:sel<shiftYm(NOW_YM,1);
   const subs={overview:'Tình hình chi tiêu và tiết kiệm trong tháng',tx:'Mọi khoản chi và khoản để dành',analytics:yearMode?'So sánh giữa các năm':'So sánh giữa các tháng',budget:'Hạn mức, tiết kiệm và mục tiêu'};
   $('#main').innerHTML=`<div class="top"><div><h1>${PAGES[page]}</h1><div class="sub">${subs[page]}</div></div>
-    <div class="right">${page==='budget'?`<button class="btn" data-act="toggleLock" style="width:44px;height:44px;padding:0;border-radius:22px;background:${budgetLocked?'var(--brand)':'var(--warn)'};color:${budgetLocked?'#fff':'#000'}" aria-label="${budgetLocked?'Mở khóa':'Khóa'}" title="${budgetLocked?'Mở khóa':'Khóa'}"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${budgetLocked?'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>':'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'}</svg></button>`:''}${store.canExport?'<button class="btn" data-act="export" style="width:44px;height:44px;padding:0;border-radius:22px" aria-label="Xuất Excel" title="Xuất Excel"><svg class="i" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>':''}<div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
+    <div class="right"><button class="btn ghost hide-out mo-only" data-act="logout" style="width:44px;height:44px;padding:0;border-radius:22px;color:var(--exp);border-color:transparent" aria-label="Đăng xuất" title="Đăng xuất"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button>${page==='budget'?`<button class="btn" data-act="toggleLock" style="width:44px;height:44px;padding:0;border-radius:22px;background:${budgetLocked?'var(--brand)':'var(--warn)'};color:${budgetLocked?'#fff':'#000'}" aria-label="${budgetLocked?'Mở khóa':'Khóa'}" title="${budgetLocked?'Mở khóa':'Khóa'}"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${budgetLocked?'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>':'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'}</svg></button>`:''}${store.canExport?'<button class="btn" data-act="export" style="width:44px;height:44px;padding:0;border-radius:22px" aria-label="Xuất Excel" title="Xuất Excel"><svg class="i" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>':''}<div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
     <div id="pg"></div>`;
   ({overview:pOverview,tx:pTx,analytics:pAnalytics,budget:pBudget})[page]($('#pg'));
 }
