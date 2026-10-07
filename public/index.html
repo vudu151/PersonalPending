@@ -345,7 +345,8 @@ const ALL=[
  {id:'hieuhy',name:'Hiếu hỷ & quà tặng',group:'want',w:.10,c:'#E11D48',ic:'🎁'},
  {id:'phatsinh',name:'Chi phát sinh',group:'want',w:.05,c:'#94A3B8',ic:'⚠️'},
  {id:'vang',name:'Tiết kiệm vàng',group:'save',w:.5,c:'#C99A1D',ic:'🪙'},
- {id:'tien',name:'Tiết kiệm tiền',group:'save',w:.5,c:'#2C6FDB',ic:'🏦'}
+ {id:'tien',name:'Tiết kiệm tiền',group:'save',w:.5,c:'#2C6FDB',ic:'🏦'},
+ {id:'tk_khac',name:'Khác',group:'save',w:0,c:'#475569',ic:'📦'}
 ];
 const CATS=ALL.filter(c=>c.group!=='save'), SAV=ALL.filter(c=>c.group==='save');
 const CAT=Object.fromEntries(ALL.map(c=>[c.id,c]));
@@ -501,7 +502,7 @@ const store=(function(){
 /* ================= phân tích ================= */
 function analyze(ym){
   const m=getM(ym);if(!m)return null;
-  const spent=spentBy(m),total=sum(spent),budget=budgetSum(m),saved=savedBy(m),savedTot=saved.vang+saved.tien;
+  const spent=spentBy(m),total=sum(spent),budget=budgetSum(m),saved=savedBy(m),savedTot=SAV.reduce((s,c)=>s+(saved[c.id]||0),0);
   const N=daysIn(ym),el=elapsedDays(ym),left=Math.max(0,N-el+(ym===NOW_YM?1:0));
   const remain=budget-total,perDay=ym===NOW_YM?remain/Math.max(1,left):null;
   const proj=ym<NOW_YM?total:(el>=7?Math.max(total,total/el*N):Math.max(total,budget));
@@ -538,10 +539,10 @@ function nextPlan(fromYm){
 }
 function yearsList(){return[...new Set(Object.keys(S.months).map(k=>+k.slice(0,4)))].sort((a,b)=>a-b)}
 function yearAgg(y,upTo=12){
-  const r={y,income:0,exp:0,need:0,want:0,vang:0,tien:0,cats:{},monthly:Array(12).fill(null),months:0};CATS.forEach(c=>r.cats[c.id]=0);
+  const r={y,income:0,exp:0,need:0,want:0,cats:{},monthly:Array(12).fill(null),months:0};ALL.forEach(c=>r.cats[c.id]=0);SAV.forEach(c=>r[c.id]=0);
   for(let i=1;i<=upTo;i++){const m=getM(y+'-'+pad(i));if(!m)continue;const sp=spentBy(m),sv=savedBy(m),t=sum(sp);
-    r.months++;r.income+=m.income;r.exp+=t;CATS.forEach(c=>r.cats[c.id]+=sp[c.id]);r.need+=groupSum(sp,'need');r.want+=groupSum(sp,'want');r.vang+=sv.vang;r.tien+=sv.tien;r.monthly[i-1]=t}
-  r.saved=r.vang+r.tien;r.rate=r.income?(r.income-r.exp)/r.income:null;return r;
+    r.months++;r.income+=m.income;r.exp+=t;CATS.forEach(c=>r.cats[c.id]+=sp[c.id]);SAV.forEach(c=>r.cats[c.id]+=sv[c.id]);r.need+=groupSum(sp,'need');r.want+=groupSum(sp,'want');SAV.forEach(c=>r[c.id]+=sv[c.id]||0);r.monthly[i-1]=t}
+  r.saved=SAV.reduce((s,c)=>s+r[c.id],0);r.rate=r.income?(r.income-r.exp)/r.income:null;return r;
 }
 
 /* ================= biểu đồ ================= */
@@ -569,7 +570,7 @@ function render(){
   const nextOk=yearMode?selYear<NOW_Y+1:sel<shiftYm(NOW_YM,1);
   const subs={overview:'Tình hình chi tiêu và tiết kiệm trong tháng',tx:'Mọi khoản chi và khoản để dành',analytics:yearMode?'So sánh giữa các năm':'So sánh giữa các tháng',budget:'Hạn mức, tiết kiệm và mục tiêu'};
   $('#main').innerHTML=`<div class="top"><div><h1>${PAGES[page]}</h1><div class="sub">${subs[page]}</div></div>
-    <div class="right">${page==='budget'?`<button class="btn" data-act="toggleLock" style="padding:0 16px;font-size:14px;min-height:44px;border-radius:22px;background:${budgetLocked?'var(--brand)':'var(--warn)'};color:${budgetLocked?'#fff':'#000'}"><svg class="i" viewBox="0 0 24 24" style="margin-right:6px"><path d="${budgetLocked?'M12 10v-3.5a3.5 3.5 0 0 0-7 0V10a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM8.5 6.5a1.5 1.5 0 0 1 3 0V10h-6V6.5z':'M12 10v-3.5a3.5 3.5 0 0 1 7 0V10a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h7v-3.5a1.5 1.5 0 0 0-3 0v1.5H3v-1.5a3.5 3.5 0 0 1 7 0z'}"/></svg>${budgetLocked?'Mở khóa':'Khóa'}</button>`:''}${store.canExport?'<button class="btn" data-act="export" style="padding:0 16px;font-size:14px;min-height:44px;border-radius:22px">Xuất Excel</button>':''}<div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
+    <div class="right">${page==='budget'?`<button class="btn" data-act="toggleLock" style="width:44px;height:44px;padding:0;border-radius:22px;background:${budgetLocked?'var(--brand)':'var(--warn)'};color:${budgetLocked?'#fff':'#000'}" aria-label="${budgetLocked?'Mở khóa':'Khóa'}" title="${budgetLocked?'Mở khóa':'Khóa'}"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${budgetLocked?'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>':'<rect x="5" y="11" width="14" height="10" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'}</svg></button>`:''}${store.canExport?'<button class="btn" data-act="export" style="width:44px;height:44px;padding:0;border-radius:22px" aria-label="Xuất Excel" title="Xuất Excel"><svg class="i" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>':''}<div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
     <div id="pg"></div>`;
   ({overview:pOverview,tx:pTx,analytics:pAnalytics,budget:pBudget})[page]($('#pg'));
 }
@@ -590,7 +591,7 @@ function pOverview(box){
   // dòng tiền: thu nhập đi đâu
   const inc=m.income||0,need=groupSum(a.spent,'need'),want=groupSum(a.spent,'want');
   const rest=Math.max(0,inc-need-want-a.savedTot);const base=Math.max(inc,need+want+a.savedTot)||1;
-  const segs=[['Thiết yếu',need,'#FFFFFF'],['Mong muốn',want,'#C9BEFF'],['Vàng',a.saved.vang,'#F3CF6B'],['Tiền',a.saved.tien,'#9DC0FF'],['Chưa dùng',rest,'rgba(255,255,255,.25)']];
+  const segs=[['Thiết yếu',need,'#FFFFFF'],['Mong muốn',want,'#C9BEFF'],...SAV.map(c=>[c.name,a.saved[c.id]||0,c.c]),['Chưa dùng',rest,'rgba(255,255,255,.25)']];
   // so với tháng trước cùng ngày
   const prevM=getM(shiftYm(sel,-1));const dayCut=cur?a.el:0;const prevTot=prevM?sum(spentBy(prevM,dayCut||undefined)):null;
   const rate=inc?(inc-a.proj)/inc:null;
@@ -705,7 +706,7 @@ function anaMonth(box){
   const full=D.filter(d=>!d.partial),B=full.length?full:D;
   const avg=B.reduce((s,d)=>s+d.total,0)/B.length,mx=B.reduce((a,b)=>b.total>a.total?b:a),mn=B.reduce((a,b)=>b.total<a.total?b:a);
   const rates=B.filter(d=>d.income).map(d=>(d.income-d.total)/d.income),avgRate=rates.length?rates.reduce((a,b)=>a+b,0)/rates.length:0;
-  const svAvg=B.reduce((s,d)=>s+d.sv.vang+d.sv.tien,0)/B.length;
+  const svAvg=B.reduce((s,d)=>s+SAV.reduce((acc,c)=>acc+(d.sv[c.id]||0),0),0)/B.length;
   const ins=insightsMonth(D);
   box.innerHTML=`<div class="statrow four" style="margin-bottom:16px">
     <div class="stat"><span class="k">Chi trung bình/tháng</span><span class="v num">${short(avg)}</span><span class="d flat">${B.length} tháng trọn vẹn</span></div>
@@ -747,9 +748,8 @@ function drawMonth(D){
   mk('mFlow',{data:{labels,datasets:[
     {type:'bar',label:'Thiết yếu',data:D.map(d=>d.need),backgroundColor:br,stack:'s',borderRadius:3},
     {type:'bar',label:'Mong muốn',data:D.map(d=>d.want),backgroundColor:wa,stack:'s',borderRadius:3},
-    {type:'bar',label:'Vàng',data:D.map(d=>Math.min(d.sv.vang,left(d))||null),backgroundColor:CAT.vang.c,stack:'s',borderRadius:3},
-    {type:'bar',label:'Tiền',data:D.map(d=>Math.min(d.sv.tien,Math.max(0,left(d)-d.sv.vang))||null),backgroundColor:CAT.tien.c,stack:'s',borderRadius:3},
-    {type:'bar',label:'Còn dư',data:D.map(d=>{const r=d.income-d.total-d.sv.vang-d.sv.tien;return r>0?r:null}),backgroundColor:mixHex(css('--muted'),sf,.6),stack:'s',borderRadius:3},
+    ...SAV.map((c,i)=>({type:'bar',label:c.name,data:D.map(d=>{const used=SAV.slice(0,i).reduce((acc,prev)=>acc+(d.sv[prev.id]||0),0);return Math.min(d.sv[c.id]||0,Math.max(0,left(d)-used))||null}),backgroundColor:c.c,stack:'s',borderRadius:3})),
+    {type:'bar',label:'Còn dư',data:D.map(d=>{const r=d.income-d.total-SAV.reduce((acc,c)=>acc+(d.sv[c.id]||0),0);return r>0?r:null}),backgroundColor:mixHex(css('--muted'),sf,.6),stack:'s',borderRadius:3},
     {type:'bar',label:'Chi vượt thu nhập',data:D.map(d=>d.income&&d.total>d.income?-(d.total-d.income):null),backgroundColor:css('--exp'),stack:'s',borderRadius:3},
     {type:'line',label:'Ngân sách chi',data:D.map(d=>d.budget),borderColor:css('--ink'),backgroundColor:css('--ink'),borderDash:[5,4],borderWidth:2,pointRadius:3}]},
     options:{interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.raw==null?null:c.dataset.label+': '+fmt(Math.abs(c.raw)),footer:it=>{const d=D[it[0].dataIndex];return`Thu nhập ${fmt(d.income)}, tổng chi ${fmt(d.total)}`}}}},scales:{x:{...xPlain,stacked:true},y:{...yMoney,stacked:true}}}});
@@ -785,7 +785,7 @@ function anaYear(box){
     const up=diffs.filter(x=>x.d>0).slice(0,2),dn=diffs.filter(x=>x.d<0).slice(-2).reverse();
     if(up.length)ins.push('Tăng mạnh nhất: '+up.map(x=>`<b>${x.c.name}</b> (+${short(x.d)})`).join(', ')+'.');
     if(dn.length)ins.push('Giảm mạnh nhất: '+dn.map(x=>`<b>${x.c.name}</b> (−${short(-x.d)})`).join(', ')+'.');
-    ins.push(`Để dành được <b>${short(A.saved)}</b> (vàng ${short(A.vang)}, tiền ${short(A.tien)}), ${A.saved>=P.saved?'nhiều':'ít'} hơn cùng kỳ năm trước ${short(Math.abs(A.saved-P.saved))}.`);
+    ins.push(`Để dành được <b>${short(A.saved)}</b> (${SAV.map(c=>`${c.name.toLowerCase()} ${short(A[c.id])}`).join(', ')}), ${A.saved>=P.saved?'nhiều':'ít'} hơn cùng kỳ năm trước ${short(Math.abs(A.saved-P.saved))}.`);
   }else ins.push(`Chưa có dữ liệu năm ${selYear-1} để so sánh cùng kỳ. Các biểu đồ bên dưới vẫn hiển thị số liệu từng năm.`);
   if(A.months){const mi=A.monthly.reduce((b,v,i)=>v!=null&&(b<0||v>A.monthly[b])?i:b,-1);if(mi>=0)ins.push(`Tháng chi nhiều nhất năm ${selYear}: <b>tháng ${mi+1}</b> (${short(A.monthly[mi])}).`)}
   const avgA=A.months?A.exp/A.months:0,avgP=P.months?P.exp/P.months:null;
@@ -794,8 +794,7 @@ function anaYear(box){
     <div class="stat"><span class="k">Thu nhập</span><span class="v num">${short(A.income)}</span>${deltaHtml(A.income,hasP?P.income:null,true)}</div>
     <div class="stat"><span class="k">Tổng chi</span><span class="v num">${short(A.exp)}</span>${deltaHtml(A.exp,hasP?P.exp:null,false)}</div>
     <div class="stat"><span class="k">Chi TB/tháng</span><span class="v num">${short(avgA)}</span>${deltaHtml(avgA,hasP?avgP:null,false)}</div>
-    <div class="stat"><span class="k">${CAT.vang.ic} Để dành vàng</span><span class="v num">${short(A.vang)}</span>${deltaHtml(A.vang,hasP?P.vang:null,true)}</div>
-    <div class="stat"><span class="k">${CAT.tien.ic} Để dành tiền</span><span class="v num">${short(A.tien)}</span>${deltaHtml(A.tien,hasP?P.tien:null,true)}</div>
+    ${SAV.map(c=>`<div class="stat"><span class="k">${c.ic} ${c.name}</span><span class="v num">${short(A[c.id])}</span>${deltaHtml(A[c.id],hasP?P[c.id]:null,true)}</div>`).join('')}
     <div class="stat"><span class="k">Tỷ lệ tiết kiệm</span><span class="v num">${A.rate==null?'–':pct(A.rate)}</span>${deltaHtml((A.rate||0)*100,hasP&&P.rate!=null?P.rate*100:null,true,'pt')}</div></div>
    <div class="grid">
     <section class="card s5"><div class="card-h"><div><h3>Nhận xét</h3><p>${selYear} so với ${selYear-1}</p></div></div><ul class="tips">${ins.map(t=>`<li>${t}</li>`).join('')}</ul></section>
@@ -804,7 +803,7 @@ function anaYear(box){
     <section class="card l6"><div class="card-h"><div><h3>Thu nhập được chia thế nào</h3><p>Tỷ lệ trên thu nhập của từng năm</p></div></div><div class="chart t"><canvas id="yMix"></canvas></div></section>
     <section class="card"><div class="card-h"><div><h3>Danh mục: ${selYear} so với ${selYear-1}</h3><p>${span==='cả năm'?'Cả năm':'Cùng kỳ '+span}, sắp theo số tiền năm ${selYear}</p></div></div><div class="chart t" style="height:${Math.max(320,CATS.length*26)}px"><canvas id="yCats"></canvas></div></section>
     <section class="card"><div class="card-h"><div><h3>Bản đồ nhiệt theo tháng</h3><p>Hàng là năm, cột là tháng. Ô càng đậm là tháng chi càng nhiều, giúp thấy mùa cao điểm như Tết.</p></div></div><div class="tbl heat">${heatYears(ys)}</div></section>
-    <section class="card"><div class="card-h"><div><h3>Bảng so sánh các năm</h3><p>Số liệu cả năm. Mũi tên là thay đổi so với năm liền trước; năm đang chạy (*) được so với cùng kỳ năm trước. Cột trung bình chỉ tính các năm trọn vẹn.</p></div></div><div class="tbl">${compareTable(ys.slice(-6).map(y=>{const g=yearAgg(y,12),shape=g=>({sp:g.cats,sv:{vang:g.vang,tien:g.tien},inc:g.income,tot:g.exp});const col={lab:y+(y===NOW_Y?'*':''),...shape(g),partial:y===NOW_Y};if(y===NOW_Y&&ys.includes(y-1))col.base=shape(yearAgg(y-1,NOW_M));return col}),'TB năm')}</div></section>
+    <section class="card"><div class="card-h"><div><h3>Bảng so sánh các năm</h3><p>Số liệu cả năm. Mũi tên là thay đổi so với năm liền trước; năm đang chạy (*) được so với cùng kỳ năm trước. Cột trung bình chỉ tính các năm trọn vẹn.</p></div></div><div class="tbl">${compareTable(ys.slice(-6).map(y=>{const g=yearAgg(y,12),shape=g=>({sp:g.cats,sv:Object.fromEntries(SAV.map(c=>[c.id,g[c.id]])),inc:g.income,tot:g.exp});const col={lab:y+(y===NOW_Y?'*':''),...shape(g),partial:y===NOW_Y};if(y===NOW_Y&&ys.includes(y-1))col.base=shape(yearAgg(y-1,NOW_M));return col}),'TB năm')}</div></section>
    </div>`;
   drawYear(ys,upTo);
 }
@@ -822,14 +821,13 @@ function drawYear(ys,upTo){
   mk('yTot',{data:{labels:lab,datasets:[
     {type:'bar',label:'Thu nhập',data:G.map(g=>g.income),backgroundColor:mixHex(br,sf,.7),borderRadius:5,stack:'i'},
     {type:'bar',label:'Chi tiêu',data:G.map(g=>g.exp),backgroundColor:br,borderRadius:5,stack:'e'},
-    {type:'bar',label:'Vàng',data:G.map(g=>g.vang),backgroundColor:CAT.vang.c,borderRadius:3,stack:'s'},
-    {type:'bar',label:'Tiền',data:G.map(g=>g.tien),backgroundColor:CAT.tien.c,borderRadius:3,stack:'s'},
+    ...SAV.map(c=>({type:'bar',label:c.name,data:G.map(g=>g[c.id]),backgroundColor:c.c,borderRadius:3,stack:'s'})),
     {type:'line',label:'Tỷ lệ tiết kiệm',data:G.map(g=>g.rate==null?null:Math.round(g.rate*100)),borderColor:css('--exp'),backgroundColor:css('--exp'),borderWidth:2,pointRadius:4,yAxisID:'y1'}]},
     options:{interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.raw==null?null:c.dataset.yAxisID==='y1'?c.dataset.label+': '+c.raw+'%':c.dataset.label+': '+fmt(c.raw)}}},
     scales:{x:{...xPlain,stacked:true},y:{...yMoney,stacked:true},y1:{position:'right',min:0,suggestedMax:40,grid:{display:false},border:{display:false},ticks:{callback:v=>v+'%'}}}}});
   const P=g=>v=>g.income?Math.max(0,v/g.income*100):0;
   mk('yMix',{type:'bar',data:{labels:lab,datasets:[
-    ['Thiết yếu',g=>g.need,br],['Mong muốn',g=>g.want,css('--want')],['Vàng',g=>g.vang,CAT.vang.c],['Tiền',g=>g.tien,CAT.tien.c],['Còn dư',g=>Math.max(0,g.income-g.exp-g.saved),mixHex(css('--muted'),sf,.6)]]
+    ['Thiết yếu',g=>g.need,br],['Mong muốn',g=>g.want,css('--want')],...SAV.map(c=>[c.name,g=>g[c.id],c.c]),['Còn dư',g=>Math.max(0,g.income-g.exp-g.saved),mixHex(css('--muted'),sf,.6)]]
     .map(([l,f,c])=>({label:l,data:G.map(g=>P(g)(f(g))),backgroundColor:c,borderRadius:2}))},
     options:{indexAxis:'y',plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+Math.round(c.parsed.x)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:()=>css('--line')},border:{display:false}},y:{...xPlain,stacked:true}}}});
   const A=yearAgg(selYear,upTo),Pv=yearAgg(selYear-1,upTo);const cats=CATS.filter(c=>A.cats[c.id]||Pv.cats[c.id]).sort((a,b)=>A.cats[b.id]-A.cats[a.id]);
@@ -854,7 +852,7 @@ function pBudget(box){
    <section class="card s7"><div class="card-h"><div><h3>Thu nhập và phân bổ</h3></div></div>
     <label class="field">Thu nhập tháng<input id="pIncome" inputmode="decimal" value="${NF.format(inc)}" ${budgetLocked?'disabled':''}></label>
     <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"><label class="field" style="flex:1 1 80px">Thiết yếu (%)<input id="pNeed" inputmode="numeric" value="${Math.round((m.needPct!=null?m.needPct:.3)*100)}" ${budgetLocked?'disabled':''}></label><label class="field" style="flex:1 1 80px">Mong muốn (%)<input id="pWant" inputmode="numeric" value="${Math.round((m.wantPct!=null?m.wantPct:.3)*100)}" ${budgetLocked?'disabled':''}></label><label class="field" style="flex:1 1 80px">Tiết kiệm (%)<input id="pSave" inputmode="numeric" value="${Math.round((m.savePct||0)*100)}" ${budgetLocked?'disabled':''}></label></div>
-    <div class="alloc" style="margin-top:16px" aria-hidden="true"><i style="width:${g.need/base*100}%;background:var(--brand)"></i><i style="width:${g.want/base*100}%;background:var(--want)"></i><i style="width:${(m.budgets.vang||0)/base*100}%;background:${CAT.vang.c}"></i><i style="width:${(m.budgets.tien||0)/base*100}%;background:${CAT.tien.c}"></i></div>
+    <div class="alloc" style="margin-top:16px" aria-hidden="true"><i style="width:${g.need/base*100}%;background:var(--brand)"></i><i style="width:${g.want/base*100}%;background:var(--want)"></i>${SAV.map(c=>`<i style="width:${(m.budgets[c.id]||0)/base*100}%;background:${c.c}"></i>`).join('')}</div>
     <ul class="tips"><li class="${free<0?'o':free>inc*.05?'w':''}">${free<0?`Kế hoạch đang vượt thu nhập <b>${fmt(-free)}</b>. Giảm bớt hạn mức hoặc mục tiêu tiết kiệm.`:free>0?`Còn <b>${fmt(free)}</b> chưa phân bổ. Có thể cộng vào tiết kiệm.`:'Kế hoạch đã cân: mỗi đồng thu nhập đều có chỗ.'}</li></ul>
     <div class="btns" style="margin-top:14px"><button class="btn" data-act="split" ${budgetLocked?'disabled':''}>Chia lại theo tỷ lệ thiết lập</button>${sel<=NOW_YM?`<button class="btn" data-act="nextplan" ${budgetLocked?'disabled':''}>Tạo kế hoạch ${ymLabel(shiftYm(sel,1)).toLowerCase()}</button>`:''}</div>
     ${(()=>{const old=Object.keys(S.months).filter(k=>k!==sel).sort().reverse();return(old.length&&Object.keys(m.budgets).length===0)?`<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:center;border-top:1px solid var(--line);padding-top:14px"><select id="copyFrom" class="btn" style="flex:1 1 180px;text-align:left;font-weight:normal;height:44px" ${budgetLocked?'disabled':''}><option value="">-- Sao chép từ tháng cũ --</option>${old.map(k=>`<option value="${k}">${ymLabel(k)}</option>`).join('')}</select><button class="btn" data-act="copyplan" style="flex:1 1 auto;justify-content:center;height:44px" ${budgetLocked?'disabled':''}>Sao chép</button></div>`:''})()}
@@ -984,17 +982,17 @@ async function exportXlsx(){
   try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js')}catch(e){toast('Không tải được thư viện Excel, kiểm tra mạng');return}
   const yms=Object.keys(S.months).sort();
   const tx=[['Ngày','Tháng','Danh mục','Nhóm','Số tiền (đ)','Ghi chú']],plan=[['Tháng','Danh mục','Nhóm','Kế hoạch (đ)','Thực tế (đ)','Còn lại (đ)','% đã dùng']];
-  const sumr=[['Tháng','Thu nhập (đ)','% tiết kiệm mục tiêu','Ngân sách chi (đ)','Tổng chi (đ)','Còn lại sau chi (đ)','Tỷ lệ còn lại','Để dành vàng (đ)','Để dành tiền (đ)']];
+  const sumr=[['Tháng','Thu nhập (đ)','% tiết kiệm mục tiêu','Ngân sách chi (đ)','Tổng chi (đ)','Còn lại sau chi (đ)','Tỷ lệ còn lại',...SAV.map(c=>`Để dành ${c.name.toLowerCase()} (đ)`)]];
   yms.forEach(ym=>{const m=S.months[ym],sp=spentBy(m),sv=savedBy(m);
     m.tx.slice().sort((a,b)=>a.d.localeCompare(b.d)).forEach(t=>{const c=CAT[t.cat];tx.push([t.d,ym,c.name,GROUP_NAME[c.group],t.amt,t.note||''])});
     ALL.forEach(c=>{const b=m.budgets[c.id]||0,v=c.group==='save'?sv[c.id]:sp[c.id];plan.push([ym,c.name,GROUP_NAME[c.group],b,v,b-v,b?v/b:0])});
-    const tot=sum(sp);sumr.push([ym,m.income,m.savePct,budgetSum(m),tot,m.income-tot,m.income?(m.income-tot)/m.income:0,sv.vang,sv.tien]);
+    const tot=sum(sp);sumr.push([ym,m.income,m.savePct,budgetSum(m),tot,m.income-tot,m.income?(m.income-tot)/m.income:0,...SAV.map(c=>sv[c.id]||0)]);
   });
-  const yr=[['Năm','Thu nhập (đ)','Tổng chi (đ)','Thiết yếu (đ)','Mong muốn (đ)','Để dành vàng (đ)','Để dành tiền (đ)','Tỷ lệ còn lại']];
-  yearsList().forEach(y=>{const g=yearAgg(y,12);yr.push([y,g.income,g.exp,g.need,g.want,g.vang,g.tien,g.rate||0])});
+  const yr=[['Năm','Thu nhập (đ)','Tổng chi (đ)','Thiết yếu (đ)','Mong muốn (đ)',...SAV.map(c=>`Để dành ${c.name.toLowerCase()} (đ)`),'Tỷ lệ còn lại']];
+  yearsList().forEach(y=>{const g=yearAgg(y,12);yr.push([y,g.income,g.exp,g.need,g.want,...SAV.map(c=>g[c.id]),g.rate||0])});
   const goals=[['Mục tiêu','Cần đạt (đ)','Đã có (đ)','Hạn chót','% hoàn thành']];S.goals.forEach(g=>goals.push([g.name,g.target,g.saved,g.deadline||'',g.target?g.saved/g.target:0]));
   const wb=XLSX.utils.book_new();const add=(rows,name,w)=>{const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=w.map(x=>({wch:x}));XLSX.utils.book_append_sheet(wb,ws,name)};
-  add(yr,'Tổng hợp năm',[8,16,16,16,16,18,18,14]);add(sumr,'Tổng hợp tháng',[10,16,18,18,16,18,14,18,18]);add(plan,'Kế hoạch',[10,22,12,14,14,14,10]);add(tx,'Giao dịch',[12,10,22,12,14,30]);add(goals,'Mục tiêu',[26,16,16,12,14]);
+  add(yr,'Tổng hợp năm',[8,16,16,16,16,...SAV.map(()=>18),14]);add(sumr,'Tổng hợp tháng',[10,16,18,18,16,18,14,...SAV.map(()=>18)]);add(plan,'Kế hoạch',[10,22,12,14,14,14,10]);add(tx,'Giao dịch',[12,10,22,12,14,30]);add(goals,'Mục tiêu',[26,16,16,12,14]);
   XLSX.writeFile(wb,'so-chi-tieu-'+todayISO()+'.xlsx');toast('Đã xuất file Excel');
 }
 
