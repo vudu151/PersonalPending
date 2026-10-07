@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Chi tiêu">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="icon" href="/icon-192.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230E8C6B'/><path d='M4 19V9M10 19V5M16 19v-7M21 19H3' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,10 +68,11 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .side .addbtn{margin:10px 0 6px}
 .side .foot{margin-top:auto;font-size:12px;color:var(--muted);padding:0 10px}
 
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-14px -16px 18px;padding:14px 16px 10px;flex-wrap:wrap;position:sticky;top:0;z-index:40;background:var(--bg)}
+@media(min-width:1000px){.top{margin:-26px -34px 18px;padding:26px 34px 14px}}
 .top h1{font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-.02em;margin:0}
 .top .sub{font-size:13px;color:var(--muted);margin-top:2px}
-.period{display:flex;align-items:center;gap:2px;background:var(--surface);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.period{display:flex;align-items:center;gap:2px;background:var(--surface);border-radius:999px;padding:4px;border:1px solid var(--line)}
 .period button{border:0;background:transparent;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
 .period button:hover:not(:disabled){background:var(--surface2)}
 .period button:disabled{opacity:.3;cursor:default}
@@ -83,7 +84,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .grid>*{grid-column:span 12;min-width:0}
 @media(min-width:760px){.s6{grid-column:span 6!important}}
 @media(min-width:1100px){.s4{grid-column:span 4!important}.s5{grid-column:span 5!important}.s7{grid-column:span 7!important}.s8{grid-column:span 8!important}.l6{grid-column:span 6!important}}
-.card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+.card{background:var(--surface);border-radius:16px;border:1px solid var(--line);padding:18px}
 .card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
 .card-h h3{margin:0;font-size:16px;font-weight:700;letter-spacing:-.01em}
 .card-h p{margin:2px 0 0;font-size:13px;color:var(--muted)}
@@ -91,24 +92,25 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .chart{position:relative;height:240px}.card.fill{display:flex;flex-direction:column}.card.fill .chart{flex:1 1 auto;min-height:240px;height:auto}.chart.t{height:300px}.chart.s{height:200px}
 
 /* ---------- hero (the memorable piece: where each đồng goes) ---------- */
-.hero{background:var(--brand);color:var(--on-brand);border-radius:24px;padding:22px 22px 20px;position:relative;overflow:hidden}
-.hero .lbl{font-size:14px;opacity:.85}
-.hero .big{font-size:clamp(36px,6vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:6px 0 4px}
-.hero .note{font-size:14px;opacity:.9;max-width:44ch}
-.hero .meter{position:relative;height:10px;border-radius:6px;background:rgba(255,255,255,.22);margin:18px 0 8px}
-.hero .meter i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:#fff}
-.hero .meter i.warn{background:#FFD27A}.hero .meter i.over{background:#FFB4AC}
-.hero .meter b{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:2px;background:var(--ink)}
-.hero .legend{display:flex;justify-content:space-between;font-size:12px;opacity:.85;gap:8px;flex-wrap:wrap}
-.flow{margin-top:18px;background:rgba(255,255,255,.12);border-radius:14px;padding:12px}
-.flow .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:rgba(255,255,255,.18)}
+.hero{background:linear-gradient(135deg, #14B8A6 0%, #0E8C6B 100%);color:#FFFFFF;border-radius:24px;padding:24px 22px 22px;position:relative;overflow:hidden;box-shadow:0 12px 24px rgba(14,140,107,.25)}
+.hero .lbl{font-size:14px;opacity:.9}
+.hero .big{font-size:clamp(36px,6vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:6px 0 4px;text-shadow:0 2px 4px rgba(0,0,0,.1)}
+.hero .note{font-size:14px;opacity:.95;max-width:44ch}
+.hero .meter{position:relative;height:12px;border-radius:6px;background:rgba(0,0,0,.15);margin:20px 0 10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.1)}
+.hero .meter i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:linear-gradient(90deg, #FDE68A, #F59E0B);box-shadow:0 1px 3px rgba(245,158,11,.3)}
+.hero .meter i.warn{background:linear-gradient(90deg, #FECACA, #EF4444)}
+.hero .meter i.over{background:linear-gradient(90deg, #FCA5A5, #DC2626)}
+.hero .meter b{position:absolute;top:-5px;bottom:-5px;width:3px;border-radius:3px;background:#FFFFFF;box-shadow:0 0 8px rgba(255,255,255,.6)}
+.hero .legend{display:flex;justify-content:space-between;font-size:13px;opacity:.95;gap:8px;flex-wrap:wrap}
+.flow{margin-top:20px;background:rgba(0,0,0,.12);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,.12)}
+.flow .bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:rgba(0,0,0,.15);box-shadow:inset 0 1px 3px rgba(0,0,0,.1)}
 .flow .bar i{display:block;height:100%}
-.flow .keys{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px}
+.flow .keys{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px}
 .flow .keys span{display:flex;align-items:center;gap:6px}.flow .keys b{font-weight:700}
-.flow .keys em{width:9px;height:9px;border-radius:3px;display:inline-block}
+.flow .keys em{width:10px;height:10px;border-radius:3px;display:inline-block}
 
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.stat{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.stat{background:var(--surface);border-radius:16px;border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
 .stat .k{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
 .stat .v{font-size:22px;font-weight:800;letter-spacing:-.02em}
 .stat .d{font-size:12.5px;font-weight:600}
@@ -117,7 +119,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .up{color:var(--exp)}.down{color:var(--brand-2)}.flat{color:var(--muted);font-weight:500}
 
 /* ---------- category bits ---------- */
-.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex:none;background:color-mix(in srgb,var(--c) 15%,transparent)}
+.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex:none;background:var(--surface2)}
 .ico.sm{width:30px;height:30px;border-radius:9px;font-size:15px}
 .row{display:flex;align-items:center;gap:12px;padding:10px 0}
 .row+.row{border-top:1px solid var(--line)}
@@ -140,13 +142,14 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .leg .pct{font-size:12px;color:var(--muted);font-weight:600;min-width:38px;text-align:right}
 
 .tips{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.tips li{padding:10px 12px;border-radius:12px;font-size:14px;background:var(--brand-soft)}
-.tips li.w{background:var(--warn-soft)}.tips li.o{background:var(--exp-soft)}
+.tips li{padding:10px 12px;border-radius:12px;font-size:14px;background:var(--surface2);border:1px solid var(--line)}
+.tips li.w{border-color:var(--warn);color:var(--warn)}
+.tips li.o{border-color:var(--exp);color:var(--exp)}
 
 /* ---------- controls ---------- */
-.seg{display:inline-flex;background:var(--surface);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow);max-width:100%;overflow-x:auto}
+.seg{display:inline-flex;background:var(--surface2);border-radius:12px;padding:4px;gap:4px;max-width:100%;overflow-x:auto}
 .seg button{border:0;background:transparent;padding:8px 14px;border-radius:9px;font-size:14px;font-weight:600;color:var(--muted);white-space:nowrap}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
@@ -154,8 +157,10 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stro
 .field{display:block;font-size:13px;color:var(--muted);font-weight:500}
 .field input,.field select,.inp{display:block;width:100%;margin-top:5px;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);font-size:16px;color:var(--ink)}
 .inp{margin:0}
-.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;background:var(--brand);color:var(--on-brand);display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn:hover{background:var(--brand-2)}
+.field input:disabled,.field select:disabled,.inp:disabled{opacity:.6;cursor:not-allowed;background:var(--surface2)}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;background:var(--brand);color:var(--on-brand);display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
+.btn:hover:not(:disabled){background:var(--brand-2)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(50%)}
 .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .btn.ghost:hover{background:var(--surface2)}
 .btn.block{width:100%}
@@ -274,8 +279,9 @@ dialog.sheet::backdrop{background:rgba(10,20,17,.45)}
     <button class="nav" data-page="tx"><svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Giao dịch</button>
     <button class="nav" data-page="analytics"><svg class="i" viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg>Phân tích</button>
     <button class="nav" data-page="budget"><svg class="i" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h12v4M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2zM16 14.5h.01"/></svg>Ngân sách</button>
-    <a class="nav" href="/huong-dan.html" style="text-decoration:none"><svg class="i" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M9 7h6"/></svg>Hướng dẫn</a>
     <button class="btn addbtn" data-act="add"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Thêm giao dịch</button>
+    <div style="flex:1"></div>
+    <button class="nav hide-out" data-act="logout" style="color:var(--exp);margin-bottom:10px;display:none"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Đăng xuất</button>
     <div class="foot" id="syncSide"></div>
   </aside>
   <main class="main" id="main"></main>
@@ -301,7 +307,7 @@ dialog.sheet::backdrop{background:rgba(10,20,17,.45)}
   <div class="cgrid" id="txCats" role="group" aria-label="Danh mục"></div>
   <div class="two">
     <label class="field">Ngày<input type="date" id="txDate" required></label>
-    <label class="field">Ghi chú<input id="txNote" placeholder="Tùy chọn" maxlength="80"></label>
+    <label class="field">Ghi chú<input id="txNote" maxlength="80"></label>
   </div>
   <button class="btn block" type="submit">Lưu giao dịch</button>
 </form></dialog>
@@ -324,20 +330,18 @@ const BACKEND='server'; // 'artifact' hoặc 'server'
 const ALL=[
  {id:'nha',name:'Tiền nhà',group:'need',w:.33,c:'#0E8C6B',ic:'🏠'},
  {id:'diennuoc',name:'Điện nước',group:'need',w:.07,c:'#0EA5E9',ic:'💡'},
- {id:'guixe',name:'Gửi xe',group:'need',w:.03,c:'#64748B',ic:'🅿️'},
- {id:'thucpham',name:'Thực phẩm',group:'need',w:.25,c:'#22A55B',ic:'🥬'},
- {id:'dilai',name:'Đi lại',group:'need',w:.08,c:'#14B8A6',ic:'🛵'},
+ {id:'thucpham',name:'Thực phẩm',group:'need',w:.37,c:'#22A55B',ic:'🥬'},
+ {id:'dilai',name:'Đi lại',group:'need',w:.11,c:'#14B8A6',ic:'🛵'},
  {id:'dodung',name:'Đồ dùng cá nhân',group:'need',w:.04,c:'#A16207',ic:'🧴'},
  {id:'cattoc',name:'Cắt tóc & chăm sóc',group:'need',w:.02,c:'#78716C',ic:'💈'},
  {id:'suckhoe',name:'Sức khỏe',group:'need',w:.04,c:'#EC4899',ic:'💊'},
- {id:'hoctap',name:'Học tập',group:'need',w:.06,c:'#6366F1',ic:'📚'},
- {id:'giadinh',name:'Gửi gia đình',group:'need',w:.06,c:'#65A30D',ic:'👨‍👩‍👧'},
  {id:'tragop',name:'Trả góp / trả nợ',group:'need',w:.02,c:'#334155',ic:'💳'},
  {id:'anngoai',name:'Ăn ngoài',group:'want',w:.25,c:'#F97316',ic:'🍜'},
  {id:'uongngoai',name:'Uống ngoài',group:'want',w:.15,c:'#B45309',ic:'🧋'},
- {id:'muado',name:'Mua đồ',group:'want',w:.20,c:'#D946EF',ic:'🛍️'},
+ {id:'muado',name:'Mua đồ',group:'want',w:.15,c:'#D946EF',ic:'🛍️'},
+ {id:'hoctap',name:'Học tập',group:'want',w:.10,c:'#6366F1',ic:'📚'},
  {id:'thethao',name:'Thể thao',group:'want',w:.10,c:'#0891B2',ic:'⚽'},
- {id:'giaitri',name:'Giải trí & du lịch',group:'want',w:.15,c:'#8B5CF6',ic:'🎬'},
+ {id:'giaitri',name:'Giải trí & du lịch',group:'want',w:.10,c:'#8B5CF6',ic:'🎬'},
  {id:'hieuhy',name:'Hiếu hỷ & quà tặng',group:'want',w:.10,c:'#E11D48',ic:'🎁'},
  {id:'phatsinh',name:'Chi phát sinh',group:'want',w:.05,c:'#94A3B8',ic:'⚠️'},
  {id:'vang',name:'Tiết kiệm vàng',group:'save',w:.5,c:'#C99A1D',ic:'🪙'},
@@ -346,7 +350,7 @@ const ALL=[
 const CATS=ALL.filter(c=>c.group!=='save'), SAV=ALL.filter(c=>c.group==='save');
 const CAT=Object.fromEntries(ALL.map(c=>[c.id,c]));
 const GROUP_NAME={need:'Thiết yếu',want:'Mong muốn',save:'Tiết kiệm'};
-const OLDCAT={an:'thucpham',hoadon:'diennuoc',muasam:'muado',quatang:'hieuhy',khac:'phatsinh'};
+const OLDCAT={an:'thucpham',hoadon:'diennuoc',muasam:'muado',quatang:'hieuhy',khac:'phatsinh',guixe:'dilai',giadinh:'phatsinh'};
 const isExp=t=>CAT[t.cat]?.group!=='save';
 
 /* ================= tiện ích ================= */
@@ -359,12 +363,8 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const r50=x=>Math.max(0,Math.round(x/50000)*50000);
 const sum=o=>Object.values(o).reduce((a,b)=>a+(+b||0),0);
 function parseMoney(s){
-  s=String(s||'').trim().toLowerCase().replace(/\s/g,'').replace(/đ|vnd/g,'');
-  let mult=1;
-  if(/(tr|triệu|m)$/.test(s)){mult=1e6;s=s.replace(/(tr|triệu|m)$/,'')}
-  else if(/(k|nghìn|ngàn)$/.test(s)){mult=1e3;s=s.replace(/(k|nghìn|ngàn)$/,'')}
-  if(mult>1){s=s.replace(',','.');const v=parseFloat(s);return isFinite(v)?Math.round(v*mult):NaN}
-  s=s.replace(/[.,]/g,'');const v=parseInt(s,10);return isFinite(v)?v:NaN;
+  s=String(s||'').trim().replace(/[.,]/g,'');
+  const v=parseInt(s,10);return isFinite(v)?v:NaN;
 }
 const pad=n=>String(n).padStart(2,'0');
 const ymOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1);
@@ -392,9 +392,10 @@ function deltaHtml(cur,base,goodUp,unit){
 let S={months:{},goals:[]};
 let sel=NOW_YM, selYear=NOW_Y, page='overview', anaMode='month', rangeN=6, trendCat='thucpham';
 let txQ='', txCat='all', txType='all';
+let budgetLocked=true;
 
-function defaultBudgets(income,savePct){
-  const need=income*.5, want=income*Math.max(0,.5-savePct), sv=income*savePct;
+function defaultBudgets(income,needPct=.3,wantPct=.3,savePct=.4){
+  const need=income*needPct, want=income*wantPct, sv=income*savePct;
   const b={};ALL.forEach(c=>b[c.id]=r50((c.group==='need'?need:c.group==='want'?want:sv)*c.w));return b;
 }
 function normCats(){
@@ -409,7 +410,7 @@ const getM=ym=>S.months[ym]||null;
 function ensureM(ym){
   if(S.months[ym])return S.months[ym];
   const prev=Object.keys(S.months).filter(k=>k<ym).sort().pop();const p=prev?S.months[prev]:null;
-  S.months[ym]={income:p?p.income:0,savePct:p?p.savePct:.2,budgets:p?{...p.budgets}:defaultBudgets(0,.2),tx:[]};
+  S.months[ym]={income:p?p.income:0,needPct:p?(p.needPct!=null?p.needPct:.3):.5,wantPct:p?(p.wantPct!=null?p.wantPct:.3):.3,savePct:p?p.savePct:.2,budgets:p?{...p.budgets}:defaultBudgets(0,.5,.3,.4),tx:[]};
   store.month(ym);return S.months[ym];
 }
 function spentBy(m,day){const o={};CATS.forEach(c=>o[c.id]=0);(m?.tx||[]).forEach(t=>{if(o[t.cat]!==undefined&&(!day||+t.d.slice(8,10)<=day))o[t.cat]+=t.amt});return o}
@@ -533,7 +534,7 @@ function nextPlan(fromYm){
     const over=months.filter(m=>(spentBy(m)[c.id]||0)>(m.budgets[c.id]||0)).length;const under=months.filter(m=>(spentBy(m)[c.id]||0)<(m.budgets[c.id]||0)*.75).length;
     budgets[c.id]=over>=2?r50(avg):(under===months.length&&months.length>=2)?r50(avg*1.1):b;
   });
-  return{target,plan:{income:base.income,savePct:base.savePct,budgets,tx:(getM(target)?.tx)||[]}};
+  return{target,plan:{income:base.income,needPct:base.needPct!=null?base.needPct:.3,wantPct:base.wantPct!=null?base.wantPct:.3,savePct:base.savePct,budgets,tx:(getM(target)?.tx)||[]}};
 }
 function yearsList(){return[...new Set(Object.keys(S.months).map(k=>+k.slice(0,4)))].sort((a,b)=>a-b)}
 function yearAgg(y,upTo=12){
@@ -562,18 +563,19 @@ function render(){
   Object.keys(charts).forEach(k=>{charts[k].destroy();delete charts[k]});
   document.querySelectorAll('[data-page]').forEach(b=>b.toggleAttribute('aria-current',false));
   document.querySelectorAll(`[data-page="${page}"]`).forEach(b=>b.setAttribute('aria-current','page'));
+  document.querySelectorAll('.hide-out').forEach(e=>e.style.display=store.canLogout?'flex':'none');
   const yearMode=page==='analytics'&&anaMode==='year';
   const label=yearMode?'Năm '+selYear:ymLabel(sel);
   const nextOk=yearMode?selYear<NOW_Y+1:sel<shiftYm(NOW_YM,1);
   const subs={overview:'Tình hình chi tiêu và tiết kiệm trong tháng',tx:'Mọi khoản chi và khoản để dành',analytics:yearMode?'So sánh giữa các năm':'So sánh giữa các tháng',budget:'Hạn mức, tiết kiệm và mục tiêu'};
   $('#main').innerHTML=`<div class="top"><div><h1>${PAGES[page]}</h1><div class="sub">${subs[page]}</div></div>
-    <div class="right"><div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
+    <div class="right">${page==='budget'?`<button class="btn" data-act="toggleLock" style="padding:0 16px;font-size:14px;min-height:44px;border-radius:22px;background:${budgetLocked?'var(--brand)':'var(--warn)'};color:${budgetLocked?'#fff':'#000'}"><svg class="i" viewBox="0 0 24 24" style="margin-right:6px"><path d="${budgetLocked?'M12 10v-3.5a3.5 3.5 0 0 0-7 0V10a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM8.5 6.5a1.5 1.5 0 0 1 3 0V10h-6V6.5z':'M12 10v-3.5a3.5 3.5 0 0 1 7 0V10a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h7v-3.5a1.5 1.5 0 0 0-3 0v1.5H3v-1.5a3.5 3.5 0 0 1 7 0z'}"/></svg>${budgetLocked?'Mở khóa':'Khóa'}</button>`:''}${store.canExport?'<button class="btn" data-act="export" style="padding:0 16px;font-size:14px;min-height:44px;border-radius:22px">Xuất Excel</button>':''}<div class="period"><button data-act="prev" aria-label="Kỳ trước"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><span>${label}</span><button data-act="next" aria-label="Kỳ sau" ${nextOk?'':'disabled'}><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div></div></div>
     <div id="pg"></div>`;
   ({overview:pOverview,tx:pTx,analytics:pAnalytics,budget:pBudget})[page]($('#pg'));
 }
 function emptyMonth(){
   return`<div class="card empty"><b>${ymLabel(sel)} chưa có kế hoạch</b>Nhập thu nhập và mục tiêu tiết kiệm, ngân sách sẽ được chia sẵn theo quy tắc 50/30/20 để bạn chỉnh lại.
-  <div class="btns" style="justify-content:center;margin-top:16px"><button class="btn" data-act="goplan">Lập kế hoạch tháng</button>${store.canSample&&!Object.keys(S.months).length?'<button class="btn ghost" data-act="sample">Xem với dữ liệu mẫu</button>':''}</div></div>`;
+  <div class="btns" style="justify-content:center;margin-top:16px"><button class="btn" data-act="goplan">Lập kế hoạch tháng</button>${store.canSample&&!Object.keys(S.months).length?'<button class="btn" data-act="sample">Xem với dữ liệu mẫu</button>':''}</div></div>`;
 }
 
 /* ================= TỔNG QUAN ================= */
@@ -846,18 +848,19 @@ function pBudget(box){
   const g={need:groupSum(m.budgets,'need'),want:groupSum(m.budgets,'want'),save:saveSum(m)};
   const free=inc-g.need-g.want-g.save;const base=Math.max(inc,g.need+g.want+g.save)||1;
   const grp=k=>`<section class="card bud l6"><div class="ghead"><b>${GROUP_NAME[k]}</b><span class="num">${fmt(g[k])} (${pct(inc?g[k]/inc:0)})</span></div>
-    ${ALL.filter(c=>c.group===k).map(c=>{const b=m.budgets[c.id]||0,s=k==='save'?sv[c.id]:sp[c.id],r=b?s/b:(s?2:0),cls=k==='save'?c.c:`var(--${r>1?'exp':r>=.8?'warn':'brand'})`;
-      return`<div class="row">${ico(c)}<div class="t"><label class="n" for="b-${c.id}">${c.name}</label><div class="s">${k==='save'?'đã để dành':'đã chi'} ${short(s)}${b&&k!=='save'&&s>b?` <span class="up">vượt ${short(s-b)}</span>`:''}</div><div class="pbar"><i style="width:${Math.min(100,r*100)}%;background:${cls}"></i></div></div><input id="b-${c.id}" data-b="${c.id}" inputmode="decimal" value="${NF.format(b)}" aria-label="Hạn mức ${c.name}"></div>`}).join('')}</section>`;
+    ${ALL.filter(c=>c.group===k).map(c=>{const b=m.budgets[c.id]||0,s=k==='save'?sv[c.id]:sp[c.id],r=b?s/b:(s?2:0),cls=k==='save'?c.c:`var(--${r>1?'exp':r>=.8?'warn':'ink2'})`;
+      return`<div class="row">${ico(c)}<div class="t"><label class="n" for="b-${c.id}">${c.name}</label><div class="s">${k==='save'?'đã để dành':'đã chi'} ${short(s)}${b&&k!=='save'&&s>b?` <span class="up">vượt ${short(s-b)}</span>`:''}</div><div class="pbar"><i style="width:${Math.min(100,r*100)}%;background:${cls}"></i></div></div><input id="b-${c.id}" data-b="${c.id}" inputmode="decimal" value="${NF.format(b)}" aria-label="Hạn mức ${c.name}" ${budgetLocked?'disabled':''}></div>`}).join('')}</section>`;
   box.innerHTML=`<div class="grid">
-   <section class="card s7"><div class="card-h"><div><h3>Thu nhập và phân bổ</h3><p>Số tiền gõ được dạng 20tr, 500k</p></div></div>
-    <div class="two"><label class="field">Thu nhập tháng<input id="pIncome" inputmode="decimal" value="${NF.format(inc)}"></label>
-    <label class="field">Tiết kiệm (% thu nhập)<input id="pSave" inputmode="numeric" value="${Math.round((m.savePct||0)*100)}"></label></div>
+   <section class="card s7"><div class="card-h"><div><h3>Thu nhập và phân bổ</h3></div></div>
+    <label class="field">Thu nhập tháng<input id="pIncome" inputmode="decimal" value="${NF.format(inc)}" ${budgetLocked?'disabled':''}></label>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"><label class="field" style="flex:1 1 80px">Thiết yếu (%)<input id="pNeed" inputmode="numeric" value="${Math.round((m.needPct!=null?m.needPct:.3)*100)}" ${budgetLocked?'disabled':''}></label><label class="field" style="flex:1 1 80px">Mong muốn (%)<input id="pWant" inputmode="numeric" value="${Math.round((m.wantPct!=null?m.wantPct:.3)*100)}" ${budgetLocked?'disabled':''}></label><label class="field" style="flex:1 1 80px">Tiết kiệm (%)<input id="pSave" inputmode="numeric" value="${Math.round((m.savePct||0)*100)}" ${budgetLocked?'disabled':''}></label></div>
     <div class="alloc" style="margin-top:16px" aria-hidden="true"><i style="width:${g.need/base*100}%;background:var(--brand)"></i><i style="width:${g.want/base*100}%;background:var(--want)"></i><i style="width:${(m.budgets.vang||0)/base*100}%;background:${CAT.vang.c}"></i><i style="width:${(m.budgets.tien||0)/base*100}%;background:${CAT.tien.c}"></i></div>
     <ul class="tips"><li class="${free<0?'o':free>inc*.05?'w':''}">${free<0?`Kế hoạch đang vượt thu nhập <b>${fmt(-free)}</b>. Giảm bớt hạn mức hoặc mục tiêu tiết kiệm.`:free>0?`Còn <b>${fmt(free)}</b> chưa phân bổ. Có thể cộng vào tiết kiệm.`:'Kế hoạch đã cân: mỗi đồng thu nhập đều có chỗ.'}</li></ul>
-    <div class="btns" style="margin-top:14px"><button class="btn ghost" data-act="split">Chia lại theo 50/30/20</button>${sel<=NOW_YM?`<button class="btn ghost" data-act="nextplan">Tạo kế hoạch ${ymLabel(shiftYm(sel,1)).toLowerCase()}</button>`:''}</div>
+    <div class="btns" style="margin-top:14px"><button class="btn" data-act="split" ${budgetLocked?'disabled':''}>Chia lại theo tỷ lệ thiết lập</button>${sel<=NOW_YM?`<button class="btn" data-act="nextplan" ${budgetLocked?'disabled':''}>Tạo kế hoạch ${ymLabel(shiftYm(sel,1)).toLowerCase()}</button>`:''}</div>
+    ${(()=>{const old=Object.keys(S.months).filter(k=>k!==sel).sort().reverse();return(old.length&&Object.keys(m.budgets).length===0)?`<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:center;border-top:1px solid var(--line);padding-top:14px"><select id="copyFrom" class="btn" style="flex:1 1 180px;text-align:left;font-weight:normal;height:44px" ${budgetLocked?'disabled':''}><option value="">-- Sao chép từ tháng cũ --</option>${old.map(k=>`<option value="${k}">${ymLabel(k)}</option>`).join('')}</select><button class="btn" data-act="copyplan" style="flex:1 1 auto;justify-content:center;height:44px" ${budgetLocked?'disabled':''}>Sao chép</button></div>`:''})()}
    </section>
-   <section class="card s5"><div class="card-h"><div><h3>Quy tắc 50/30/20</h3><p>Kế hoạch của bạn so với mức gợi ý</p></div></div>
-    ${[['need','Thiết yếu',.5,'brand'],['want','Mong muốn',.3,'want'],['save','Tiết kiệm',.2,'gold']].map(([k,n,sg,col])=>`<div class="row"><div class="t"><div class="n">${n}</div><div class="pbar"><i style="width:${Math.min(100,(inc?g[k]/inc:0)*100)}%;background:var(--${col})"></i></div></div><div class="a num">${pct(inc?g[k]/inc:0)}<small>gợi ý ${pct(sg)}</small></div></div>`).join('')}
+   <section class="card s5"><div class="card-h"><div><h3>Tỷ lệ phân bổ</h3></div></div>
+    ${[['need','Thiết yếu',m.needPct!=null?m.needPct:.3,'ink2'],['want','Mong muốn',m.wantPct!=null?m.wantPct:.3,'ink2'],['save','Tiết kiệm',m.savePct||0,'gold']].map(([k,n,sg,col])=>`<div class="row"><div class="t"><div class="n">${n}</div><div class="pbar"><i style="width:${Math.min(100,(inc?g[k]/inc:0)*100)}%;background:var(--${col})"></i></div></div><div class="a num">${pct(inc?g[k]/inc:0)}<small>thiết lập ${pct(sg)}</small></div></div>`).join('')}
    </section>
    ${grp('need')}${grp('want')}${grp('save')}
    <div class="l6" style="display:grid;gap:16px;align-content:start">${goalsHtml()}</div>
@@ -865,22 +868,20 @@ function pBudget(box){
 }
 function goalsHtml(){
   const items=S.goals.map(g=>{const r=g.target?Math.min(1,g.saved/g.target):0;let meta=`${short(g.saved)} / ${short(g.target)}`;
-    if(g.deadline&&g.saved<g.target){const[y,mo]=g.deadline.split('-').map(Number);const left=(y-NOW_Y)*12+(mo-NOW_M);meta+=left>0?`. Cần góp ${short((g.target-g.saved)/left)}/tháng trong ${left} tháng`:'. Đã đến hạn'}
+    let req=0,left=0;
+    if(g.deadline&&g.saved<g.target){const[y,mo]=g.deadline.split('-').map(Number);left=(y-NOW_Y)*12+(mo-NOW_M);if(left>0){req=(g.target-g.saved)/left;meta+=`. Cần góp ${short(req)}/tháng trong ${left} tháng`}else meta+='. Đã đến hạn'}
     if(g.saved>=g.target)meta+='. Đã hoàn thành';
-    return`<div class="row" style="flex-wrap:wrap"><span class="ico" style="--c:var(--gold)">🎯</span><div class="t"><div class="n">${esc(g.name)}</div><div class="s goalmeta">${meta}</div><div class="pbar"><i style="width:${r*100}%;background:var(--gold)"></i></div></div>
-      <button class="del" data-gdel="${esc(g.id)}" aria-label="Xóa mục tiêu"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
-      <div style="display:flex;gap:8px;width:100%;padding-left:50px"><input class="inp" data-gin="${esc(g.id)}" inputmode="decimal" placeholder="Số tiền góp thêm" aria-label="Góp thêm cho ${esc(g.name)}"><button class="btn" data-gadd="${esc(g.id)}">Góp</button></div></div>`}).join('');
-  return`<section class="card"><div class="card-h"><div><h3>Mục tiêu tài chính</h3><p>Số tiền cần đạt và hạn chót</p></div></div>${items||'<p class="flat" style="margin:0 0 12px">Chưa có mục tiêu. Ví dụ: quỹ khẩn cấp 30tr trước tháng 6.</p>'}
+    const sgBtn=(req>0&&sel>=NOW_YM)?`<button class="btn" data-act="gsuggest" data-id="${esc(g.id)}" style="padding:6px 12px;font-size:13px;height:auto;min-height:0;white-space:nowrap" aria-label="Gợi ý chi tiêu">Gợi ý phân bổ</button>`:'';
+    return`<div class="goal-item" style="padding:16px 0;border-bottom:1px solid var(--line)"><div style="display:flex;gap:14px;align-items:flex-start"><span class="ico" style="background:var(--surface2);font-size:18px;border-radius:12px">🎯</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.3">${esc(g.name)}</div><div class="s goalmeta" style="font-size:13px;color:var(--muted);margin-bottom:10px">${meta}</div><div class="pbar" style="height:8px;background:var(--line);border-radius:4px;margin:0"><i style="width:${r*100}%;background:var(--gold);height:100%;border-radius:4px;display:block"></i></div></div><button class="del" data-gdel="${esc(g.id)}" aria-label="Xóa mục tiêu" style="flex-shrink:0"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div style="display:flex;gap:10px;margin-top:16px"><input class="inp" data-gin="${esc(g.id)}" inputmode="decimal" placeholder="Góp thêm..." style="padding:10px 14px;font-size:15px;flex:1;min-width:0;height:42px"><button class="btn" data-gadd="${esc(g.id)}" style="padding:0 16px;height:42px;white-space:nowrap">Góp</button>${sgBtn?sgBtn.replace('padding:6px 12px;font-size:13px;height:auto;min-height:0;','padding:0 16px;height:42px;'):''}</div></div>`}).join('');
+  return`<section class="card"><div class="card-h"><div><h3>Mục tiêu tài chính</h3></div></div>${items||'<p class="flat" style="margin:0 0 12px">Chưa có mục tiêu.</p>'}
    <div style="display:grid;gap:10px;margin-top:12px;border-top:1px solid var(--line);padding-top:14px"><label class="field">Tên mục tiêu<input id="gName" placeholder="Quỹ khẩn cấp"></label>
    <div class="two"><label class="field">Cần đạt<input id="gTarget" inputmode="decimal" placeholder="30tr"></label><label class="field">Hạn chót<input id="gDead" type="month"></label></div>
-   <label class="field">Đã có sẵn<input id="gSaved" inputmode="decimal" placeholder="0"></label><button class="btn ghost" data-act="addgoal">Thêm mục tiêu</button></div></section>`;
+   <label class="field">Đã có sẵn<input id="gSaved" inputmode="decimal" placeholder="0"></label><button class="btn" data-act="addgoal">Thêm mục tiêu</button></div></section>`;
 }
 function dataHtml(){
-  const b=[];if(store.canExport)b.push('<button class="btn ghost" data-act="export">Xuất Excel</button>');
-  if(store.canSample&&!Object.keys(S.months).length)b.push('<button class="btn ghost" data-act="sample">Thêm dữ liệu mẫu</button>');
-  if(store.canExport)b.push('<a class="btn ghost" href="/huong-dan.html" style="text-decoration:none">Hướng dẫn sử dụng</a>');
-  if(store.canLogout)b.push('<button class="btn danger" data-act="logout">Đăng xuất</button>');
-  return b.length?`<section class="card" style="margin-top:16px"><div class="card-h"><div><h3>Dữ liệu</h3><p>${store.canExport?'Tải toàn bộ giao dịch, kế hoạch và mục tiêu về một file Excel.':'Quản lý dữ liệu của sổ.'}</p></div></div><div class="btns">${b.join('')}</div></section>`:'';
+  const b=[];
+  if(store.canSample&&!Object.keys(S.months).length)b.push('<button class="btn" data-act="sample">Thêm dữ liệu mẫu</button>');
+  return b.length?`<section class="card" style="margin-top:16px"><div class="card-h"><div><h3>Dữ liệu</h3></div></div><div class="btns">${b.join('')}</div></section>`:'';
 }
 
 /* ================= THÊM GIAO DỊCH ================= */
@@ -897,7 +898,7 @@ function drawTxForm(){
   $('#quick').innerHTML=(txKind==='save'?[500000,1e6,2e6,5e6]:[20000,50000,100000,200000,500000]).map(v=>`<button type="button" class="chip" data-quick="${v}">+${short(v)}</button>`).join('');
   updHint();
 }
-function updHint(){const v=parseMoney($('#txAmt').value);$('#amtHint').textContent=v>0?fmt(v):'Gõ 45k, 1.2tr hoặc số đầy đủ'}
+function updHint(){const v=parseMoney($('#txAmt').value);$('#amtHint').textContent=v>0?fmt(v):'Vui lòng gõ số tiền đầy đủ'}
 $('#txAmt').addEventListener('input',updHint);
 $('#txForm').addEventListener('submit',e=>{
   e.preventDefault();const amt=parseMoney($('#txAmt').value),d=$('#txDate').value;
@@ -927,13 +928,35 @@ document.addEventListener('click',e=>{
   else if(act==='prev'||act==='next'){const k=act==='next'?1:-1;if(page==='analytics'&&anaMode==='year')selYear+=k;else{sel=shiftYm(sel,k);selYear=+sel.slice(0,4)}render()}
   else if(act==='goplan'){page='budget';render()}
   else if(act==='create'){ensureM(sel);store.persist();render()}
-  else if(act==='split'){const m=getM(sel);m.budgets=defaultBudgets(m.income,m.savePct);store.month(sel);store.persist();render();toast('Đã chia lại theo 50/30/20')}
+  else if(act==='split'){const m=getM(sel);m.budgets=defaultBudgets(m.income,m.needPct!=null?m.needPct:.3,m.wantPct!=null?m.wantPct:.3,m.savePct);store.month(sel);store.persist();render();toast('Đã chia lại theo tỷ lệ thiết lập')}
   else if(act==='nextplan'){const m=getM(sel);if(!m)return;const{target,plan}=nextPlan(sel);
     if(getM(target)&&!confirm(ymLabel(target)+' đã có kế hoạch. Thay hạn mức bằng kế hoạch mới? Giao dịch đã ghi vẫn giữ nguyên.'))return;
     S.months[target]=plan;store.month(target);store.persist();sel=target;page='budget';render();toast('Đã tạo kế hoạch '+ymLabel(target).toLowerCase()+', hãy rà lại')}
+  else if(act==='copyplan'){
+    const fromYm=$('#copyFrom')?.value; if(!fromYm)return toast('Vui lòng chọn tháng để sao chép');
+    const fromM=getM(fromYm), m=getM(sel); if(!fromM || !m)return;
+    if(!confirm(`Sao chép kế hoạch từ ${ymLabel(fromYm).toLowerCase()} sang ${ymLabel(sel).toLowerCase()}? Các hạn mức hiện tại sẽ bị thay thế.`))return;
+    m.income=fromM.income; m.needPct=fromM.needPct; m.wantPct=fromM.wantPct; m.savePct=fromM.savePct;
+    m.budgets={...fromM.budgets};
+    store.month(sel);store.persist();render();toast('Đã sao chép kế hoạch');
+  }
   else if(act==='addgoal'){const name=$('#gName').value.trim(),target=parseMoney($('#gTarget').value),saved=parseMoney($('#gSaved').value)||0;
     if(!name||!(target>0)){toast('Nhập tên và số tiền cần đạt');return}
     const g={id:Date.now().toString(36),name:name.slice(0,60),target,saved,deadline:$('#gDead').value||''};S.goals.push(g);store.goal(g);store.persist();render();toast('Đã thêm mục tiêu')}
+  else if(act==='toggleLock'){
+    budgetLocked=!budgetLocked;render();toast(budgetLocked?'Đã khóa chỉnh sửa':'Đã mở khóa');
+  }
+  else if(act==='gsuggest'){
+    const g=S.goals.find(x=>String(x.id)===d.id); if(!g)return;
+    const m=getM(sel); if(!m||!(m.income>0))return toast('Cần nhập thu nhập cho tháng này trước');
+    const[y,mo]=g.deadline.split('-').map(Number);const left=(y-NOW_Y)*12+(mo-NOW_M);if(left<=0)return;
+    const req=(g.target-g.saved)/left;
+    if(req>=m.income)return toast('Số tiền cần góp vượt quá thu nhập tháng!');
+    const savePct=Math.ceil((req/m.income)*100)/100, wantPct=Math.max(0,Math.floor((1-savePct)*0.4*100)/100), needPct=Math.max(0,Math.round((1-savePct-wantPct)*100)/100);
+    if(!confirm(`Để đạt mục tiêu, hệ thống gợi ý Tỷ lệ phân bổ mới:\n- Tiết kiệm: ${Math.round(savePct*100)}% (${fmt(req)})\n- Thiết yếu: ${Math.round(needPct*100)}%\n- Mong muốn: ${Math.round(wantPct*100)}%\n\nÁp dụng cho tháng ${ymLabel(sel).toLowerCase()}?`))return;
+    m.savePct=savePct; m.needPct=needPct; m.wantPct=wantPct; m.budgets=defaultBudgets(m.income, needPct, wantPct, savePct);
+    store.month(sel);store.persist();render();toast('Đã áp dụng gợi ý phân bổ');
+  }
   else if(act==='export')exportXlsx();
   else if(act==='logout'){if(confirm('Đăng xuất khỏi thiết bị này?'))store.logout()}
   else if(act==='sample')addSample();
@@ -943,8 +966,10 @@ document.addEventListener('change',e=>{
   if(el.id==='txCatSel'){txCat=el.value;render();return}
   if(el.id==='trendSel'){trendCat=el.value;render();return}
   const m=getM(sel);if(!m)return;
-  if(el.id==='pIncome'){const v=parseMoney(el.value);if(v>=0){const was=m.income;m.income=v;if(!was&&!budgetSum(m))m.budgets=defaultBudgets(v,m.savePct);else{const cur=saveSum(m),tgt=v*m.savePct;SAV.forEach(c=>m.budgets[c.id]=r50(cur?(m.budgets[c.id]||0)/cur*tgt:tgt*c.w))}}}
-  else if(el.id==='pSave'){const v=parseFloat(el.value);if(v>=0&&v<=90){m.savePct=v/100;const tgt=m.income*m.savePct,cur=saveSum(m);SAV.forEach(c=>m.budgets[c.id]=r50(cur?(m.budgets[c.id]||0)/cur*tgt:tgt*c.w))}}
+  if(el.id==='pIncome'){const v=parseMoney(el.value);if(v>=0){const was=m.income;m.income=v;if(!was&&!budgetSum(m))m.budgets=defaultBudgets(v,m.needPct!=null?m.needPct:.3,m.wantPct!=null?m.wantPct:.3,m.savePct);else{const cur=saveSum(m),tgt=v*m.savePct;SAV.forEach(c=>m.budgets[c.id]=r50(cur?(m.budgets[c.id]||0)/cur*tgt:tgt*c.w))}}}
+  else if(el.id==='pNeed'){const v=parseFloat(el.value);if(v>=0&&v<=100){m.needPct=v/100;}}
+  else if(el.id==='pWant'){const v=parseFloat(el.value);if(v>=0&&v<=100){m.wantPct=v/100;}}
+  else if(el.id==='pSave'){const v=parseFloat(el.value);if(v>=0&&v<=100){m.savePct=v/100;const tgt=m.income*m.savePct,cur=saveSum(m);SAV.forEach(c=>m.budgets[c.id]=r50(cur?(m.budgets[c.id]||0)/cur*tgt:tgt*c.w))}}
   else if(el.dataset.b){const v=parseMoney(el.value);if(v>=0){m.budgets[el.dataset.b]=v;if(CAT[el.dataset.b].group==='save'&&m.income)m.savePct=Math.min(.9,saveSum(m)/m.income)}}
   else return;
   store.month(sel);store.persist();render();
@@ -980,7 +1005,7 @@ function addSample(){
   const start=(NOW_Y-1)+'-01';let ym=start;
   while(ym<=NOW_YM){
     const y=+ym.slice(0,4),mo=+ym.slice(5);const inc=y<NOW_Y?18000000:20000000;
-    const m={income:inc,savePct:.2,budgets:defaultBudgets(inc,.2),tx:[]};const last=ym===NOW_YM?new Date().getDate():daysIn(ym);
+    const m={income:inc,needPct:.5,wantPct:.3,savePct:.2,budgets:defaultBudgets(inc,.5,.3,.4),tx:[]};const last=ym===NOW_YM?new Date().getDate():daysIn(ym);
     const tet=mo<=2,summer=mo>=6&&mo<=8,trend=y<NOW_Y?1.06:1;
     CATS.forEach(c=>{
       let f=(c.group==='want'?.8+rnd()*.45:.65+rnd()*.45)*trend;
