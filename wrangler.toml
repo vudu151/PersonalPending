@@ -1,0 +1,14 @@
+name = "so-chi-tieu"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+preview_urls = false
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "so-chi-tieu"
+database_id = "a0bb77c7-2a24-457c-b358-90ca552a3dd1"

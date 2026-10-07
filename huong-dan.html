@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hướng dẫn sử dụng Sổ chi tiêu</title>
+<meta name="theme-color" content="#0E8C6B">
+<link rel="icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5F4; --surface:#FFFFFF; --surface2:#F7F9F8; --ink:#14212B; --ink2:#3A4A55; --muted:#6B7A84; --line:#E3E9E6;
+  --brand:#0E8C6B; --brand-2:#0B7457; --brand-soft:#E1F2EC; --on-brand:#FFFFFF;
+  --exp:#E0524A; --exp-soft:#FCE9E7; --warn:#D99211; --warn-soft:#FBF1DC; --want:#6F5BD9; --gold:#C99A1D; --cash:#2C6FDB;
+  --shadow:0 1px 2px rgba(20,33,43,.05),0 6px 20px rgba(20,33,43,.05);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1513; --surface:#141E1B; --surface2:#19251F; --ink:#E7EFEC; --ink2:#C2CEC9; --muted:#8C9B95; --line:#24322D;
+  --brand:#2FB98E; --brand-2:#4CCFA4; --brand-soft:#123228; --on-brand:#06140F;
+  --exp:#FF7A70; --exp-soft:#3A1E1C; --warn:#F0B13D; --warn-soft:#3A2E14; --want:#9C8BFF; --gold:#E3B53C; --cash:#5D94F2; --shadow:0 1px 2px rgba(0,0,0,.3)}}
+:root[data-theme="dark"]{
+  --bg:#0D1513; --surface:#141E1B; --surface2:#19251F; --ink:#E7EFEC; --ink2:#C2CEC9; --muted:#8C9B95; --line:#24322D;
+  --brand:#2FB98E; --brand-2:#4CCFA4; --brand-soft:#123228; --on-brand:#06140F;
+  --exp:#FF7A70; --exp-soft:#3A1E1C; --warn:#F0B13D; --warn-soft:#3A2E14; --want:#9C8BFF; --gold:#E3B53C; --cash:#5D94F2; --shadow:0 1px 2px rgba(0,0,0,.3)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--brand-2)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+header.top .in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.brand .logo{width:32px;height:32px;border-radius:10px;background:var(--brand);display:grid;place-items:center;color:var(--on-brand)}
+.brand svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.open{margin-left:auto;background:var(--brand);color:var(--on-brand);text-decoration:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:11px;white-space:nowrap}
+.open:hover{background:var(--brand-2)}
+
+/* layout */
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:minmax(0,1fr);gap:32px}
+@media(min-width:1000px){.wrap{grid-template-columns:230px minmax(0,1fr);gap:48px}}
+nav.toc{display:none}
+@media(min-width:1000px){
+  nav.toc{display:block;position:sticky;top:84px;align-self:start;max-height:calc(100vh - 100px);overflow:auto;padding-top:36px}
+  nav.toc a{display:block;padding:7px 12px;border-radius:10px;color:var(--ink2);text-decoration:none;font-size:14px;font-weight:500}
+  nav.toc a:hover{background:var(--surface)}
+  nav.toc a.on{background:var(--brand-soft);color:var(--brand-2);font-weight:700}
+}
+.mtoc{display:flex;gap:6px;overflow-x:auto;padding:12px 0 4px;margin:0 -20px;padding-left:20px;padding-right:20px;scrollbar-width:none}
+.mtoc::-webkit-scrollbar{display:none}
+.mtoc a{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink2);text-decoration:none}
+@media(min-width:1000px){.mtoc{display:none}}
+
+main{min-width:0}
+.intro{padding:40px 0 8px;max-width:68ch}
+.intro h1{font-size:clamp(30px,5vw,44px);line-height:1.12;letter-spacing:-.03em;margin:0 0 14px;font-weight:800}
+.intro p{font-size:18px;color:var(--ink2);margin:0}
+
+section.s{padding-top:44px}
+section.s>h2{font-size:clamp(22px,3vw,28px);letter-spacing:-.02em;margin:0 0 6px;font-weight:800;line-height:1.25}
+section.s>.lead{color:var(--muted);margin:0 0 20px;max-width:68ch}
+h3{font-size:17px;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 12px;max-width:72ch}
+ul.plain{margin:0 0 12px;padding-left:20px;max-width:72ch}ul.plain li{margin:4px 0}
+.card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:20px}
+.grid2{display:grid;gap:16px}
+@media(min-width:760px){.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.note{background:var(--brand-soft);border-radius:12px;padding:12px 14px;font-size:15px;margin:14px 0}
+.note.w{background:var(--warn-soft)}
+.note b{font-weight:700}
+kbd{font-family:inherit;font-size:.88em;font-weight:700;background:var(--surface2);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+
+/* steps (thật sự là trình tự) */
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:grid;gap:12px}
+ol.steps>li{counter-increment:st;display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px}
+ol.steps>li::before{content:counter(st);width:36px;height:36px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-weight:800}
+ol.steps p:last-child{margin-bottom:0}
+
+/* tables */
+.tbl{overflow-x:auto;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:13px;color:var(--muted);font-weight:600;background:var(--surface2)}
+tbody tr:last-child td{border-bottom:0}
+td .em{font-size:18px;margin-right:6px}
+.tag{display:inline-block;font-size:12px;font-weight:700;border-radius:6px;padding:1px 7px;white-space:nowrap}
+.tag.need{background:var(--brand-soft);color:var(--brand-2)}
+.tag.want{background:color-mix(in srgb,var(--want) 16%,transparent);color:var(--want)}
+.tag.save{background:color-mix(in srgb,var(--gold) 18%,transparent);color:var(--gold)}
+
+/* mini mockups */
+.mock{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:18px;max-width:380px;margin:0 auto;border:1px solid var(--line)}
+.mock .seg{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;width:max-content;margin:0 auto 12px}
+.mock .seg span{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted)}
+.mock .seg span.on{background:var(--ink);color:var(--surface)}
+.mock .amt{font-size:32px;font-weight:800;text-align:center;border-bottom:2px solid var(--brand);padding-bottom:4px;letter-spacing:-.02em}
+.mock .hint{text-align:center;font-size:12px;color:var(--muted);margin:6px 0 10px}
+.mock .quick{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:12px}
+.mock .quick span{border:1px solid var(--line);border-radius:999px;text-align:center;font-size:12px;padding:4px 0}
+.mock .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mock .tiles span{background:var(--surface2);border-radius:10px;padding:7px 2px;text-align:center;font-size:11px;line-height:1.25;border:1px solid transparent}
+.mock .tiles span b{display:block;font-size:18px;font-weight:400}
+.mock .tiles span.on{border-color:var(--brand);background:var(--brand-soft);font-weight:700}
+.mock .save{margin-top:12px;background:var(--brand);color:var(--on-brand);text-align:center;font-weight:700;border-radius:11px;padding:10px}
+.heroMock{background:var(--brand);color:var(--on-brand);border-radius:20px;padding:18px}
+.heroMock .l{font-size:13px;opacity:.85}.heroMock .b{font-size:32px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:4px 0}
+.heroMock .meter{position:relative;height:9px;border-radius:6px;background:rgba(255,255,255,.22);margin:14px 0 6px}
+.heroMock .meter i{position:absolute;inset:0 auto 0 0;width:38%;background:#FFD27A;border-radius:6px}
+.heroMock .meter em{position:absolute;top:-4px;bottom:-4px;left:19%;width:2px;background:var(--ink)}
+.heroMock .s{font-size:12px;opacity:.85;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.flowbar{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:12px;background:rgba(255,255,255,.2)}
+.flowbar i{display:block}
+.alloc{display:flex;height:18px;border-radius:9px;overflow:hidden;margin:10px 0}
+.alloc i{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;font-style:normal}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink2)}
+.legend span{display:flex;align-items:center;gap:6px}.legend em{width:10px;height:10px;border-radius:3px;display:inline-block}
+.heat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.heat span{border-radius:8px;text-align:center;font-weight:700;font-size:13px;padding:8px 2px}
+.pages{display:grid;gap:16px}
+@media(min-width:760px){.pages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pages .card h3{display:flex;align-items:center;gap:10px}
+.pages .card h3 span{width:34px;height:34px;border-radius:10px;background:var(--brand-soft);display:grid;place-items:center;font-size:17px}
+
+/* timeline thói quen */
+.tl{display:grid;gap:0;border-left:3px solid var(--line);margin-left:10px}
+.tl>div{position:relative;padding:0 0 18px 22px}
+.tl>div::before{content:"";position:absolute;left:-9px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--surface);border:3px solid var(--brand)}
+.tl b{display:block}
+.tl span{color:var(--ink2)}
+
+details{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);margin-bottom:10px}
+summary{cursor:pointer;padding:15px 18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:20px;line-height:1;color:var(--muted);flex:none}
+details[open] summary::after{content:"−"}
+details>div{padding:0 18px 16px;color:var(--ink2)}
+details>div p:last-child{margin-bottom:0}
+footer{max-width:1180px;margin:0 auto;padding:24px 20px 48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+@media(max-width:600px){
+  body{font-size:15.5px}
+  .card,ol.steps>li{padding:15px}
+  th,td{padding:9px 10px}
+  table{font-size:14px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M21 19H3"/></svg></span>Sổ chi tiêu</a>
+  <a class="open" href="/">Mở ứng dụng</a>
+</div></header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Mục lục">
+    <a href="#bat-dau">Bắt đầu</a>
+    <a href="#ghi">Ghi giao dịch</a>
+    <a href="#trang">Các trang trong app</a>
+    <a href="#ngan-sach">Ngân sách 50/30/20</a>
+    <a href="#tiet-kiem">Tiết kiệm và mục tiêu</a>
+    <a href="#phan-tich">Đọc phần Phân tích</a>
+    <a href="#thoi-quen">Thói quen mỗi tháng</a>
+    <a href="#danh-muc">Chọn danh mục nào</a>
+    <a href="#du-lieu">Dữ liệu và bảo mật</a>
+    <a href="#hoi-dap">Hỏi đáp</a>
+  </nav>
+
+  <main>
+    <div class="intro">
+      <h1>Biết tiền đi đâu, rồi chỉnh tháng sau cho tốt hơn</h1>
+      <p>Sổ chi tiêu giúp bạn lập ngân sách đầu tháng, ghi từng khoản chi trong ngày, và so sánh giữa các tháng, các năm để điều chỉnh kế hoạch. Hướng dẫn này đi từ việc dùng lần đầu đến cách đọc từng biểu đồ.</p>
+      <div class="mtoc" aria-label="Mục lục">
+        <a href="#bat-dau">Bắt đầu</a><a href="#ghi">Ghi giao dịch</a><a href="#trang">Các trang</a><a href="#ngan-sach">Ngân sách</a><a href="#tiet-kiem">Tiết kiệm</a><a href="#phan-tich">Phân tích</a><a href="#thoi-quen">Thói quen</a><a href="#danh-muc">Danh mục</a><a href="#du-lieu">Dữ liệu</a><a href="#hoi-dap">Hỏi đáp</a>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <section class="s" id="bat-dau">
+      <h2>Bắt đầu trong 3 phút</h2>
+      <p class="lead">Làm một lần khi mới dùng trên mỗi thiết bị.</p>
+      <ol class="steps">
+        <li><div><h3>Đăng nhập</h3><p>Mở địa chỉ web của bạn và nhập mật khẩu đã đặt khi triển khai. Nhớ chuyển bộ gõ tiếng Việt sang <kbd>E</kbd> trước khi gõ mật khẩu. Mỗi thiết bị chỉ cần nhập một lần.</p></div></li>
+        <li><div><h3>Lập kế hoạch tháng đầu tiên</h3><p>Vào <b>Ngân sách</b>, bấm <b>Tạo kế hoạch</b>. Nhập <b>thu nhập tháng</b> (gõ <code>20tr</code> là được) và <b>% tiết kiệm</b> mong muốn, ví dụ <code>20</code>. App tự chia hạn mức cho 20 danh mục theo quy tắc 50/30/20.</p><p>Sau đó sửa lại những dòng chưa sát thực tế, ví dụ tiền nhà đúng bằng số bạn trả hằng tháng.</p></div></li>
+        <li><div><h3>Cài lên màn hình điện thoại</h3>
+          <ul class="plain"><li><b>iPhone (Safari):</b> nút Chia sẻ → <b>Thêm vào MH chính</b>.</li><li><b>Android (Chrome):</b> menu <kbd>⋮</kbd> → <b>Thêm vào màn hình chính</b>.</li></ul>
+          <p>App sẽ mở toàn màn hình như một ứng dụng thường.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- 2 -->
+    <section class="s" id="ghi">
+      <h2>Ghi giao dịch</h2>
+      <p class="lead">Việc bạn làm nhiều nhất, mỗi lần khoảng 10 giây. Ghi ngay lúc vừa chi thì số liệu mới đúng.</p>
+      <div class="grid2">
+        <div>
+          <p>Bấm nút <b>+</b>: trên điện thoại là nút tròn ở giữa thanh dưới, trên máy tính là nút <b>Thêm giao dịch</b> ở menu trái.</p>
+          <ol class="steps">
+            <li><div><h3>Chọn loại</h3><p><b>Chi tiêu</b> cho mọi khoản tiêu. <b>Tiết kiệm</b> khi bạn mua vàng hoặc gửi tiền tiết kiệm. Khoản tiết kiệm không bị tính vào chi tiêu.</p></div></li>
+            <li><div><h3>Nhập số tiền</h3><p>Gõ tắt được: <code>45k</code>, <code>1.2tr</code>, <code>350000</code>. Hoặc bấm các nút <b>+50k</b>, <b>+100k</b> để cộng dồn. Dòng nhỏ bên dưới hiện số đầy đủ để bạn kiểm tra.</p></div></li>
+            <li><div><h3>Chọn danh mục, ngày, ghi chú</h3><p>Ngày mặc định là hôm nay. Sửa nếu ghi bù cho hôm trước. Ghi chú không bắt buộc nhưng giúp tìm lại dễ hơn.</p></div></li>
+          </ol>
+        </div>
+        <div aria-hidden="true">
+          <div class="mock">
+            <div class="seg"><span class="on">Chi tiêu</span><span>Tiết kiệm</span></div>
+            <div class="amt num">45.000</div>
+            <div class="hint">45.000 đ</div>
+            <div class="quick"><span>+20k</span><span>+50k</span><span>+100k</span><span>+200k</span><span>+500k</span></div>
+            <div class="tiles">
+              <span><b>🏠</b>Tiền nhà</span><span><b>💡</b>Điện nước</span><span><b>🥬</b>Thực phẩm</span><span><b>🛵</b>Đi lại</span>
+              <span><b>🍜</b>Ăn ngoài</span><span class="on"><b>🧋</b>Uống ngoài</span><span><b>🛍️</b>Mua đồ</span><span><b>⚽</b>Thể thao</span>
+            </div>
+            <div class="save">Lưu giao dịch</div>
+          </div>
+        </div>
+      </div>
+      <div class="tbl" style="margin-top:20px"><table>
+        <thead><tr><th>Bạn gõ</th><th>App hiểu là</th></tr></thead>
+        <tbody>
+          <tr><td><code>45k</code></td><td class="num">45.000 đ</td></tr>
+          <tr><td><code>1.2tr</code> hoặc <code>1,2tr</code></td><td class="num">1.200.000 đ</td></tr>
+          <tr><td><code>2m</code></td><td class="num">2.000.000 đ</td></tr>
+          <tr><td><code>350000</code> hoặc <code>350.000</code></td><td class="num">350.000 đ</td></tr>
+        </tbody></table></div>
+      <div class="note"><b>Sửa một giao dịch đã ghi:</b> app chưa có nút sửa. Vào trang <b>Giao dịch</b>, bấm biểu tượng thùng rác để xóa, rồi ghi lại khoản đúng.</div>
+    </section>
+
+    <!-- 3 -->
+    <section class="s" id="trang">
+      <h2>Các trang trong app</h2>
+      <p class="lead">Nút <b>‹ Tháng 10/2026 ›</b> ở góc trên đổi tháng đang xem. Ở chế độ phân tích theo năm, nút này đổi năm.</p>
+      <div class="pages">
+        <div class="card">
+          <h3><span aria-hidden="true">🏠</span>Tổng quan</h3>
+          <p>Tình hình tháng đang xem trong một màn hình.</p>
+          <div class="heroMock" aria-hidden="true" style="margin:12px 0">
+            <div class="l">Còn được tiêu mỗi ngày</div><div class="b num">378.927 đ</div>
+            <div class="meter"><i></i><em></em></div>
+            <div class="s"><span>Đã dùng 38% ngân sách</span><span>Vạch đậm: nhịp hôm nay</span></div>
+            <div class="flowbar"><i style="width:25%;background:#fff"></i><i style="width:6%;background:#C9BEFF"></i><i style="width:8%;background:#F3CF6B"></i><i style="width:10%;background:#9DC0FF"></i></div>
+          </div>
+          <ul class="plain">
+            <li><b>Còn được tiêu mỗi ngày:</b> phần ngân sách còn lại chia cho số ngày còn lại. Giữ mỗi ngày dưới con số này là cuối tháng không vượt.</li>
+            <li><b>Thanh tiến độ và vạch đậm:</b> thanh là phần ngân sách đã dùng, vạch là nơi lẽ ra bạn nên ở nếu chi đều. Thanh vượt qua vạch nghĩa là đang tiêu nhanh hơn kế hoạch. Thanh chuyển vàng là cảnh báo, chuyển đỏ là đã vượt.</li>
+            <li><b>Thu nhập đã đi đâu:</b> chia thu nhập thành thiết yếu, mong muốn, vàng, tiền và phần chưa dùng.</li>
+            <li><b>Gợi ý điều chỉnh:</b> danh mục sắp vượt, vượt nhiều tháng liền, hoặc dư liên tục.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span aria-hidden="true">📋</span>Giao dịch</h3>
+          <p>Mọi khoản trong tháng, nhóm theo ngày, kèm tổng chi mỗi ngày.</p>
+          <ul class="plain">
+            <li><b>Tìm kiếm</b> theo ghi chú hoặc tên danh mục, ví dụ gõ <code>grab</code>.</li>
+            <li><b>Lọc</b> theo danh mục, hoặc chỉ xem Chi tiêu, chỉ xem Tiết kiệm.</li>
+            <li><b>Xóa</b> bằng biểu tượng thùng rác ở cuối mỗi dòng.</li>
+          </ul>
+          <h3 style="margin-top:18px"><span aria-hidden="true">💼</span>Ngân sách</h3>
+          <p>Nơi đặt thu nhập, % tiết kiệm, hạn mức từng danh mục và mục tiêu tài chính. Xem chi tiết ở phần <a href="#ngan-sach">Ngân sách 50/30/20</a>.</p>
+        </div>
+        <div class="card" style="grid-column:1/-1">
+          <h3><span aria-hidden="true">📊</span>Phân tích</h3>
+          <p>Hai chế độ, chuyển bằng nút <b>Theo tháng / Theo năm</b>:</p>
+          <ul class="plain">
+            <li><b>Theo tháng:</b> so sánh 3, 6 hoặc 12 tháng gần nhất. Phù hợp để chỉnh hạn mức tháng sau.</li>
+            <li><b>Theo năm:</b> so sánh năm này với năm trước và tổng các năm. Phù hợp để nhìn xu hướng dài hạn.</li>
+          </ul>
+          <p>Cách đọc từng biểu đồ có ở phần <a href="#phan-tich">Đọc phần Phân tích</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="s" id="ngan-sach">
+      <h2>Ngân sách và quy tắc 50/30/20</h2>
+      <p class="lead">Mỗi đồng thu nhập nên có chỗ của nó ngay từ đầu tháng.</p>
+      <div class="card">
+        <div class="alloc" aria-label="Ví dụ chia 20 triệu"><i style="width:50%;background:var(--brand)">50%</i><i style="width:30%;background:var(--want)">30%</i><i style="width:10%;background:var(--gold)">10%</i><i style="width:10%;background:var(--cash)">10%</i></div>
+        <div class="legend"><span><em style="background:var(--brand)"></em>Thiết yếu 10tr</span><span><em style="background:var(--want)"></em>Mong muốn 6tr</span><span><em style="background:var(--gold)"></em>Vàng 2tr</span><span><em style="background:var(--cash)"></em>Tiền 2tr</span></div>
+        <p style="margin-top:14px">Ví dụ với thu nhập 20 triệu và mục tiêu tiết kiệm 20%:</p>
+        <ul class="plain">
+          <li><b>50% thiết yếu:</b> những khoản bắt buộc như tiền nhà, điện nước, thực phẩm, đi lại, gửi gia đình.</li>
+          <li><b>30% mong muốn:</b> những khoản làm cuộc sống thoải mái hơn như ăn ngoài, cà phê, mua đồ, giải trí.</li>
+          <li><b>20% tiết kiệm:</b> chia cho vàng và tiền, mặc định mỗi loại một nửa.</li>
+        </ul>
+      </div>
+      <h3 style="margin-top:22px">Các thao tác trong trang Ngân sách</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Bạn muốn</th><th>Làm thế nào</th></tr></thead>
+        <tbody>
+          <tr><td>Đổi hạn mức một danh mục</td><td>Gõ số mới vào ô bên phải dòng đó rồi bấm ra ngoài. Lưu tự động.</td></tr>
+          <tr><td>Chia lại toàn bộ từ đầu</td><td>Bấm <b>Chia lại theo 50/30/20</b>. Các số bạn đã sửa sẽ bị thay.</td></tr>
+          <tr><td>Đổi % tiết kiệm</td><td>Sửa ô <b>Tiết kiệm (% thu nhập)</b>. Vàng và tiền được chia lại theo tỷ lệ đang có.</td></tr>
+          <tr><td>Đổi riêng số vàng hoặc tiền</td><td>Sửa trong nhóm <b>Tiết kiệm</b>. Ô % tự cập nhật theo.</td></tr>
+          <tr><td>Lập kế hoạch tháng sau</td><td>Bấm <b>Tạo kế hoạch tháng sau</b>. Xem giải thích ngay dưới.</td></tr>
+        </tbody></table></div>
+      <div class="note"><b>Tạo kế hoạch tháng sau</b> dựa trên 3 tháng gần nhất: danh mục vượt hạn mức từ 2 tháng trở lên sẽ được nâng lên bằng mức chi trung bình, danh mục luôn dùng dưới 75% sẽ được giảm xuống. Các danh mục khác giữ nguyên. Bạn chỉ cần rà lại.</div>
+      <div class="note w">Dòng nhận xét dưới thanh phân bổ cho biết kế hoạch đã cân chưa. Nếu báo <b>vượt thu nhập</b>, hãy giảm bớt hạn mức nhóm mong muốn trước.</div>
+    </section>
+
+    <!-- 5 -->
+    <section class="s" id="tiet-kiem">
+      <h2>Tiết kiệm và mục tiêu</h2>
+      <p class="lead">Hai công cụ khác nhau, dùng cùng lúc được.</p>
+      <div class="grid2">
+        <div class="card">
+          <h3>🪙 Tiết kiệm vàng và 🏦 tiết kiệm tiền</h3>
+          <p>Mỗi lần mua vàng hoặc gửi tiền tiết kiệm, ghi một giao dịch loại <b>Tiết kiệm</b>. App so số đã để dành với kế hoạch tháng và hiện ở thẻ <b>Tiết kiệm tháng này</b> trên Tổng quan.</p>
+          <p>Khoản này <b>không cộng vào tổng chi</b>. Trong phần Phân tích, vàng và tiền được tách riêng để bạn thấy mỗi năm để dành được bao nhiêu mỗi loại.</p>
+        </div>
+        <div class="card">
+          <h3>🎯 Mục tiêu tài chính</h3>
+          <p>Ở cuối trang Ngân sách. Đặt tên, số tiền cần đạt và hạn chót, ví dụ <i>Quỹ khẩn cấp 30tr trước tháng 6</i>. App tính số tiền cần góp mỗi tháng.</p>
+          <p>Mỗi khi để dành cho mục tiêu, nhập số tiền và bấm <b>Góp</b>. Mục tiêu là sổ theo dõi riêng, không tự liên kết với giao dịch tiết kiệm.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="s" id="phan-tich">
+      <h2>Đọc phần Phân tích</h2>
+      <p class="lead">Mỗi biểu đồ trả lời một câu hỏi. Rê chuột hoặc chạm vào biểu đồ để xem số cụ thể.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Biểu đồ</th><th>Trả lời câu hỏi</th><th>Nên làm gì</th></tr></thead>
+        <tbody>
+          <tr><td><b>Thu nhập đi đâu qua các tháng</b></td><td>Tháng nào còn dư, tháng nào để dành ít</td><td>Phần xám "Còn dư" lớn mà để dành ít thì tăng % tiết kiệm</td></tr>
+          <tr><td><b>Từng danh mục qua các tháng</b></td><td>Danh mục nào đang tăng dần</td><td>Cột đậm nhất cao vọt là dấu hiệu cần chú ý</td></tr>
+          <tr><td><b>Xem kỹ một danh mục</b></td><td>Hạn mức danh mục này có sát thực tế không</td><td>Cột đỏ nhiều tháng thì nâng hạn mức hoặc cắt giảm</td></tr>
+          <tr><td><b>Tổng chi và tỷ lệ tiết kiệm</b></td><td>Chi ít đi có thật sự giữ lại được nhiều hơn không</td><td>Theo dõi đường xanh đi lên</td></tr>
+          <tr><td><b>Bảng so sánh</b></td><td>Thay đổi từng danh mục so với kỳ trước</td><td>Mũi tên ▲ đỏ là chi tăng, ▼ xanh là chi giảm</td></tr>
+        </tbody></table></div>
+
+      <h3 style="margin-top:24px">Bản đồ nhiệt hạn mức</h3>
+      <p>Mỗi ô là phần trăm hạn mức đã dùng của một danh mục trong một tháng. Đọc theo hàng ngang để thấy danh mục nào vượt lặp đi lặp lại.</p>
+      <div class="heat" aria-hidden="true">
+        <span style="background:color-mix(in srgb,var(--brand) 28%,var(--surface))">62%</span>
+        <span style="background:color-mix(in srgb,var(--warn) 50%,var(--surface))">92%</span>
+        <span style="background:color-mix(in srgb,var(--exp) 55%,var(--surface))">121%</span>
+        <span style="background:color-mix(in srgb,var(--exp) 65%,var(--surface))">129%</span>
+      </div>
+      <div class="legend"><span><em style="background:var(--brand)"></em>Dưới 80%: ổn</span><span><em style="background:var(--warn)"></em>80–100%: sát hạn mức</span><span><em style="background:var(--exp)"></em>Trên 100%: vượt</span></div>
+
+      <h3 style="margin-top:24px">So sánh theo năm và "cùng kỳ"</h3>
+      <p>Khi năm hiện tại chưa hết, app so sánh <b>cùng kỳ</b>. Ví dụ đang là tháng 10/2026 thì lấy tháng 1 đến 10 năm 2026 so với tháng 1 đến 10 năm 2025, không so với cả năm 2025. Như vậy mới công bằng.</p>
+      <ul class="plain">
+        <li><b>Chi tiêu từng tháng qua các năm:</b> mỗi năm một đường, cùng tháng nằm thẳng hàng. Đoạn nét đứt cuối đường là tháng đang chạy, chưa đủ số liệu.</li>
+        <li><b>Bản đồ nhiệt theo tháng:</b> hàng là năm, cột là tháng. Ô càng đậm là tháng chi càng nhiều. Dùng để thấy mùa cao điểm như Tết, hè, mùa cưới, và chuẩn bị trước.</li>
+        <li><b>Tổng theo năm</b> và <b>Thu nhập được chia thế nào:</b> xem mỗi năm bạn có chi ít đi và để dành nhiều hơn không.</li>
+      </ul>
+      <div class="note">Dấu <b>*</b> sau tên tháng hoặc năm nghĩa là kỳ đó đang chạy, số liệu tính đến hôm nay.</div>
+    </section>
+
+    <!-- 7 -->
+    <section class="s" id="thoi-quen">
+      <h2>Thói quen mỗi tháng</h2>
+      <p class="lead">Mỗi tháng chỉ cần khoảng 15 phút cho các bước lập và xem lại kế hoạch.</p>
+      <div class="tl">
+        <div><b>Ngày 1: lập kế hoạch</b><span>Vào Ngân sách, kiểm tra thu nhập và hạn mức. Nếu cuối tháng trước đã bấm "Tạo kế hoạch tháng sau" thì chỉ cần rà lại.</span></div>
+        <div><b>Hằng ngày: ghi chép</b><span>Ghi mỗi khoản chi ngay khi trả tiền. Liếc con số "Còn được tiêu mỗi ngày".</span></div>
+        <div><b>Ngày nhận lương: để dành trước</b><span>Mua vàng hoặc gửi tiết kiệm ngay, rồi ghi giao dịch loại Tiết kiệm. Để dành trước, tiêu sau.</span></div>
+        <div><b>Giữa tháng: xem nhịp</b><span>Thanh tiến độ có vượt vạch không, có gợi ý nào không. Đây là lúc còn kịp điều chỉnh.</span></div>
+        <div><b>Cuối tháng: xem lại và lập tháng sau</b><span>Vào Phân tích, xem bản đồ nhiệt và nhận xét. Sau đó bấm <b>Tạo kế hoạch tháng sau</b> và bấm <b>Xuất Excel</b> để sao lưu.</span></div>
+        <div style="padding-bottom:0"><b>Cuối năm: nhìn lại cả năm</b><span>Phân tích, chọn Theo năm. So sánh tổng chi, tỷ lệ tiết kiệm, và đặt mục tiêu cho năm mới.</span></div>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="s" id="danh-muc">
+      <h2>Chọn danh mục nào?</h2>
+      <p class="lead">Ghi đúng danh mục thì phân tích mới có ý nghĩa. Bảng dưới giúp phân biệt những khoản dễ nhầm.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Danh mục</th><th>Nhóm</th><th>Gồm những gì</th></tr></thead>
+        <tbody>
+          <tr><td><span class="em">🏠</span>Tiền nhà</td><td><span class="tag need">Thiết yếu</span></td><td>Tiền thuê nhà hằng tháng</td></tr>
+          <tr><td><span class="em">💡</span>Điện nước</td><td><span class="tag need">Thiết yếu</span></td><td>Điện, nước, internet, gas</td></tr>
+          <tr><td><span class="em">🅿️</span>Gửi xe</td><td><span class="tag need">Thiết yếu</span></td><td>Vé tháng, gửi xe lẻ</td></tr>
+          <tr><td><span class="em">🥬</span>Thực phẩm</td><td><span class="tag need">Thiết yếu</span></td><td>Đi chợ, siêu thị, đồ về nấu ở nhà</td></tr>
+          <tr><td><span class="em">🛵</span>Đi lại</td><td><span class="tag need">Thiết yếu</span></td><td>Xăng, Grab, xe buýt, vé tàu xe</td></tr>
+          <tr><td><span class="em">🧴</span>Đồ dùng cá nhân</td><td><span class="tag need">Thiết yếu</span></td><td>Dầu gội, kem đánh răng, giặt là</td></tr>
+          <tr><td><span class="em">💈</span>Cắt tóc &amp; chăm sóc</td><td><span class="tag need">Thiết yếu</span></td><td>Cắt tóc, chăm sóc bản thân</td></tr>
+          <tr><td><span class="em">💊</span>Sức khỏe</td><td><span class="tag need">Thiết yếu</span></td><td>Thuốc, khám bệnh, bảo hiểm y tế</td></tr>
+          <tr><td><span class="em">📚</span>Học tập</td><td><span class="tag need">Thiết yếu</span></td><td>Khóa học, sách, học phí, lệ phí thi</td></tr>
+          <tr><td><span class="em">👨‍👩‍👧</span>Gửi gia đình</td><td><span class="tag need">Thiết yếu</span></td><td>Gửi hoặc biếu bố mẹ</td></tr>
+          <tr><td><span class="em">💳</span>Trả góp / trả nợ</td><td><span class="tag need">Thiết yếu</span></td><td>Trả góp điện thoại, xe, khoản vay</td></tr>
+          <tr><td><span class="em">🍜</span>Ăn ngoài</td><td><span class="tag want">Mong muốn</span></td><td>Ăn ở quán, đồ ăn mua sẵn mang về, đặt đồ ăn</td></tr>
+          <tr><td><span class="em">🧋</span>Uống ngoài</td><td><span class="tag want">Mong muốn</span></td><td>Cà phê, trà sữa, nước ngoài quán</td></tr>
+          <tr><td><span class="em">🛍️</span>Mua đồ</td><td><span class="tag want">Mong muốn</span></td><td>Quần áo, giày, đồ công nghệ, mua online</td></tr>
+          <tr><td><span class="em">⚽</span>Thể thao</td><td><span class="tag want">Mong muốn</span></td><td>Tiền sân bóng, gym, dụng cụ thể thao</td></tr>
+          <tr><td><span class="em">🎬</span>Giải trí &amp; du lịch</td><td><span class="tag want">Mong muốn</span></td><td>Xem phim, đi chơi, du lịch, về quê dịp lễ</td></tr>
+          <tr><td><span class="em">🎁</span>Hiếu hỷ &amp; quà tặng</td><td><span class="tag want">Mong muốn</span></td><td>Đám cưới, sinh nhật, lì xì, quà Tết</td></tr>
+          <tr><td><span class="em">⚠️</span>Chi phát sinh</td><td><span class="tag want">Mong muốn</span></td><td>Sửa đồ hỏng, tiền phạt, khoản bất ngờ, phần mềm</td></tr>
+          <tr><td><span class="em">🪙</span>Tiết kiệm vàng</td><td><span class="tag save">Tiết kiệm</span></td><td>Mua vàng để dành</td></tr>
+          <tr><td><span class="em">🏦</span>Tiết kiệm tiền</td><td><span class="tag save">Tiết kiệm</span></td><td>Gửi tiết kiệm ngân hàng, chuyển vào quỹ dự phòng</td></tr>
+        </tbody></table></div>
+      <div class="note"><b>Hay nhầm:</b> đồ ăn mua ở chợ, siêu thị về nấu là <b>Thực phẩm</b>; đồ ăn đã nấu sẵn hoặc đặt qua app là <b>Ăn ngoài</b>. Tiền nước sinh hoạt là <b>Điện nước</b>; nước uống ở quán là <b>Uống ngoài</b>.</div>
+    </section>
+
+    <!-- 9 -->
+    <section class="s" id="du-lieu">
+      <h2>Dữ liệu và bảo mật</h2>
+      <div class="grid2">
+        <div class="card"><h3>Dữ liệu nằm ở đâu</h3><p>Trên cơ sở dữ liệu Cloudflare D1 trong tài khoản của bạn. Mọi thiết bị đăng nhập cùng mật khẩu sẽ thấy cùng dữ liệu. Mở app trên thiết bị khác là số liệu tự tải mới.</p></div>
+        <div class="card"><h3>Khi mất mạng</h3><p>Cứ ghi bình thường. App giữ trên máy và tự gửi lên khi có mạng. Dòng chữ nhỏ cuối trang cho biết còn bao nhiêu thay đổi chưa lưu. Đừng đăng xuất khi còn thay đổi chưa lưu.</p></div>
+        <div class="card"><h3>Sao lưu</h3><p>Mỗi tháng vào cuối trang <b>Ngân sách</b>, bấm <b>Xuất Excel</b>. File gồm tổng hợp năm, tổng hợp tháng, kế hoạch, toàn bộ giao dịch và mục tiêu.</p></div>
+        <div class="card"><h3>Mật khẩu</h3><p>Ai có địa chỉ web vẫn mở được trang, nhưng không xem được dữ liệu nếu không có mật khẩu. Không chia sẻ mật khẩu. Dùng máy người khác thì bấm <b>Đăng xuất</b> ở cuối trang Ngân sách khi xong.</p></div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="s" id="hoi-dap">
+      <h2>Hỏi đáp</h2>
+      <details><summary>Đầu tháng mở app thấy "Tháng này chưa có kế hoạch"?</summary><div><p>Bấm <b>Lập kế hoạch tháng</b> rồi <b>Tạo kế hoạch</b>. App sao chép thu nhập và hạn mức của tháng gần nhất để bạn sửa. Lần sau, bấm <b>Tạo kế hoạch tháng sau</b> từ cuối tháng trước để có kế hoạch đã tự điều chỉnh.</p></div></details>
+      <details><summary>Ghi giao dịch rồi mà không thấy trong danh sách?</summary><div><p>Kiểm tra tháng đang xem ở góc trên. Giao dịch được xếp vào tháng của <b>ngày giao dịch</b>, không phải tháng đang mở. Ngoài ra, xem bộ lọc ở trang Giao dịch có đang chọn một danh mục khác không.</p></div></details>
+      <details><summary>Có thu nhập phụ thì nhập thế nào?</summary><div><p>Cộng vào ô <b>Thu nhập tháng</b> trong trang Ngân sách. Nếu thu nhập phụ đến giữa tháng, sửa lại con số lúc đó. Phần chênh lệch có thể dồn vào tiết kiệm.</p></div></details>
+      <details><summary>Vì sao "Còn được tiêu mỗi ngày" đầu tháng lại thấp?</summary><div><p>Các khoản cố định như tiền nhà, gửi gia đình thường trả đầu tháng nên thanh tiến độ vượt vạch nhịp. Con số mỗi ngày sẽ ổn định khi qua các khoản lớn này. Bạn cũng có thể ghi chúng ngay ngày 1 để thấy đúng phần còn lại.</p></div></details>
+      <details><summary>Muốn đổi tên hoặc thêm danh mục?</summary><div><p>Cần sửa code ở hai file. Xem mục <b>Thêm hoặc đổi danh mục</b> trong file <code>README.md</code> của dự án.</p></div></details>
+      <details><summary>Quên mật khẩu?</summary><div><p>Không lấy lại được, nhưng đặt mới được: mở cmd trong thư mục dự án, chạy <code>npx wrangler secret put APP_PASSWORD</code>. Dữ liệu vẫn giữ nguyên.</p></div></details>
+      <details><summary>Lỡ xóa nhầm giao dịch hoặc dữ liệu?</summary><div><p>Một giao dịch thì ghi lại. Nếu mất nhiều dữ liệu, có thể khôi phục về thời điểm trước đó trong vài ngày gần nhất bằng tính năng Time Travel của D1. Xem mục <b>Sao lưu và khôi phục</b> trong <code>README.md</code>.</p></div></details>
+    </section>
+  </main>
+</div>
+<footer>Sổ chi tiêu, bản dùng cá nhân. Hướng dẫn deploy và bảo trì code nằm trong file <code>README.md</code> của dự án.</footer>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  if(!('IntersectionObserver' in window)||!links.length)return;
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on')}})},{rootMargin:'-30% 0px -60% 0px'});
+  document.querySelectorAll('section.s').forEach(function(s){io.observe(s)});
+})();
+</script>
+</body>
+</html>
