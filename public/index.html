@@ -484,7 +484,7 @@ const store=(function(){
     catch(e){if(!e.auth)setSync('Đang ngoại tuyến, hiển thị dữ liệu lưu trên máy này.')}
   }
   function showLogin(msg){$('#login').hidden=false;$('#loginErr').textContent=msg||'';setTimeout(()=>$('#pw').focus(),50)}
-  function logout(expired){token='';localStorage.removeItem(TK);if(!expired){S={months:{},goals:[]};queue=[];localStorage.removeItem(CK);localStorage.removeItem(QK);render()}showLogin(expired?'Mật khẩu không đúng hoặc đã đổi. Nhập lại để tiếp tục.':'')}
+  function logout(reason){token='';localStorage.removeItem(TK);if(!reason){S={months:{},goals:[]};queue=[];localStorage.removeItem(CK);localStorage.removeItem(QK);render()}showLogin(reason==='idle'?'Đã quá 10 phút không thao tác. Vui lòng nhập lại mật khẩu.':(reason?'Mật khẩu không đúng hoặc đã đổi. Nhập lại để tiếp tục.':''))}
   $('#loginForm').addEventListener('submit',async e=>{
     e.preventDefault();const pw=$('#pw').value;
     try{const d=await api('GET','/all',null,pw);token=pw;localStorage.setItem(TK,token);$('#login').hidden=true;$('#pw').value='';if(queue.length)await sync();else apply(d)}
@@ -493,6 +493,9 @@ const store=(function(){
   addEventListener('online',()=>flush());
   setInterval(()=>{if(queue.length)flush()},30000);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&token&&!queue.length)sync()});
+  let idleTm;const resetIdle=()=>{clearTimeout(idleTm);if($('#login').hidden)idleTm=setTimeout(()=>logout('idle'),600000)};
+  ['click','touchstart','mousemove','keydown','scroll'].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
+  resetIdle();
   const monthOp=ym=>{const m=S.months[ym];if(m)enqueue({t:'month',ym,body:{income:m.income,savePct:m.savePct,budgets:m.budgets}})};
   return{boot(){load();render();sync()},persist,setSync,canExport:true,canLogout:true,canSample:false,logout:()=>logout(false),
     month:monthOp,addTx:(ym,t)=>enqueue({t:'tx',body:t}),delTx:(ym,id)=>enqueue({t:'deltx',id}),
