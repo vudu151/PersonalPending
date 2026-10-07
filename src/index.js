@@ -8,7 +8,7 @@ const CATS = new Set([
   // Chi tiêu mong muốn
   'anngoai','uongngoai','muado','thethao','giaitri','hieuhy','phatsinh',
   // Tiết kiệm
-  'vang','tien',
+  'vang','tien','tk_khac',
   // Mã cũ, vẫn nhận để dữ liệu cũ không bị lỗi
   'an','hoadon','muasam','quatang','khac',
 ]);
